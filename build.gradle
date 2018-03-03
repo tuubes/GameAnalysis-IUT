@@ -1,0 +1,32 @@
+apply plugin: 'java'
+version = '0.1'
+
+// Dépôts fournissant les dépendances
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+	maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+// Définit "provided" qui permet de considérer une dépendance comme disponible, sans l'inclure dans le .jar final
+configurations {
+	provided
+	compile.extendsFrom provided
+}
+
+// Dépendances du projet
+dependencies {
+	compile 'com.github.TheElectronWill.Night-Config:core:3.0.3' // Lib de configuration
+	compile 'com.github.TheElectronWill.Night-Config:toml:3.0.3' // Lib de configuration
+	compile 'com.h2database:h2:1.4.+' // Base de données
+	provided 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT' // API Bukkit
+}
+
+// Fonction gradle fatJar : crée un fichier .jar contenant le plugin et les dépendances nécessaires
+task fatJar(type: Jar) {
+    baseName = project.name + '-fat'
+    from { (configurations.compile - configurations.provided).collect {
+		it.isDirectory() ? it : zipTree (it)
+	} }
+    with jar
+}
