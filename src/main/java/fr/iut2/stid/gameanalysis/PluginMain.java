@@ -12,6 +12,7 @@ public class PluginMain extends JavaPlugin {
 		pm.registerEvents(new MoveListener(), this);
 		pm.registerEvents(new MessageListener(), this);
 		pm.registerEvents(new BlockBreakListener(), this);
+		pm.registerEvents(new BlockPlaceListener(), this);
 		getLogger().info("Plugin chargé !");
 	}
 	
