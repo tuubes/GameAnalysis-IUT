@@ -26,17 +26,18 @@ public class PluginMain extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		PluginManager pm = getServer().getPluginManager();
-		// Enregistrer les EventListeners ci-dessous:
-		pm.registerEvents(new MoveListener(), this);
-		pm.registerEvents(new MessageListener(), this);
-		pm.registerEvents(new BlockBreakListener(), this);
-		pm.registerEvents(new BlockPlaceListener(), this);
 		getLogger().info("Chargement de la base de données");
 		try {
 			initDatabase();
 		} catch (ClassNotFoundException | SQLException ex) {
 			fatalError(ex, "Impossible de charger la base de données");
+		}
+
+		getLogger().info("Enregistrement des event listeners");
+		try {
+			registerEventListeners();
+		} catch (SQLException ex) {
+			fatalError(ex, "Impossible de charger les évènements");
 		}
 
 		getLogger().info("Plugin chargé !");
@@ -83,5 +84,17 @@ public class PluginMain extends JavaPlugin {
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS BrokenBlocks (Id INT, PlayerPlayTime LONG)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlacedBlocks (Id INT, PlayerPlayTime LONG)");
 		s.close();
+	}
+
+	/**
+	 * Enregistre les event listeners pour réagir aux évènements du jeu.
+	 * @throws SQLException si un erreur SQL survient dans la préparation des requêtes d'enregistrement des évènements dans la BDD
+	 */
+	private void registerEventListeners() throws SQLException {
+		PluginManager pm = getServer().getPluginManager();
+		pm.registerEvents(new MoveListener(conn), this);
+		pm.registerEvents(new MessageListener(conn), this);
+		pm.registerEvents(new BlockBreakListener(conn), this);
+		pm.registerEvents(new BlockPlaceListener(conn), this);
 	}
 }
