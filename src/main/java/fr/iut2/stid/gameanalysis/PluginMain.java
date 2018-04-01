@@ -10,6 +10,7 @@ public class PluginMain extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		// Enregistrer les EventListeners ci-dessous:
 		pm.registerEvents(new MoveListener(), this);
+		pm.registerEvents(new MessageListener(), this);
 		
 		getLogger().info("Plugin chargé !");
 	}
