@@ -18,7 +18,7 @@ public class MessageListener implements Listener {
 	@EventHandler
 	public void onPlayerMessage(AsyncPlayerChatEvent evt) {
 		int nbmsg = evt.getMessage().length();
-		
+
 		try {
 			insertMessageEvent.setInt(1, nbmsg);
 			insertMessageEvent.executeUpdate();
@@ -26,9 +26,5 @@ public class MessageListener implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
 	}
-	
-
 }

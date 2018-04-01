@@ -30,6 +30,5 @@ public class BlockBreakListener implements Listener {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
 	}
 }
