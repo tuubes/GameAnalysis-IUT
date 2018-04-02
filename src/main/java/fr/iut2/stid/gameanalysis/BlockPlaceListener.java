@@ -22,13 +22,13 @@ public class BlockPlaceListener implements Listener {
 		Player p = evt.getPlayer();
 		int b = evt.getBlockPlaced().getTypeId();
 
-		long minuts = p.getStatistic(Statistic.PLAY_ONE_TICK) / 1200;
+		long ticks = p.getStatistic(Statistic.PLAY_ONE_TICK);
+		long minuts = ticks / 1200;
 		try {
 			insertBlockPlaceEvent.setInt(1, b);
-			insertBlockPlaceEvent.setLong(1, minuts);
+			insertBlockPlaceEvent.setLong(2, minuts);
 			insertBlockPlaceEvent.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
