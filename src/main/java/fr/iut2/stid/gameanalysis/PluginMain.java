@@ -47,7 +47,13 @@ public class PluginMain extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if (ok) {
-			// TODO fermer les PreparedStatements des différents Listeners
+			try {
+				conn.close();
+				// TODO fermer les PreparedStatements des différents Listeners
+			} catch (SQLException e) {
+				getLogger().severe("Erreur lors de la déconnexion de la base de données");
+				e.printStackTrace();
+			}
 		}
 		getLogger().info("Plugin déchargé !");
 	}
