@@ -49,7 +49,6 @@ public class PluginMain extends JavaPlugin {
 		if (ok) {
 			try {
 				conn.close();
-				// TODO fermer les PreparedStatements des différents Listeners
 			} catch (SQLException e) {
 				getLogger().severe("Erreur lors de la déconnexion de la base de données");
 				e.printStackTrace();
