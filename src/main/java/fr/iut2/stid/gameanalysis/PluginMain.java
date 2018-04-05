@@ -101,5 +101,6 @@ public class PluginMain extends JavaPlugin {
 		pm.registerEvents(new MessageListener(conn), this);
 		pm.registerEvents(new BlockBreakListener(conn), this);
 		pm.registerEvents(new BlockPlaceListener(conn), this);
+		pm.registerEvents(new PrivacyInformer(), this);
 	}
 }
