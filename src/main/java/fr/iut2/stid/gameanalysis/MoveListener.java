@@ -26,7 +26,7 @@ public class MoveListener implements Listener {
 	private final Map<Entity, EntityChunkInfos> chunkInfos = new HashMap<>();
 
 	public MoveListener(Connection conn) throws SQLException {
-		insertPlayerMove = conn.prepareStatement("INSERT INTO PlayerMoves VALUES(?,?,?,?)");
+		insertPlayerMove = conn.prepareStatement("INSERT INTO PlayerMoves VALUES(?,?,?,?,?)");
 	}
 
 	@EventHandler
@@ -37,10 +37,11 @@ public class MoveListener implements Listener {
 		if (infos.update(newLocation)) {
 			long time = System.currentTimeMillis();
 			try {
-				insertPlayerMove.setLong(1, time);
-				insertPlayerMove.setInt(2, infos.lastChunkX);
-				insertPlayerMove.setInt(3, infos.lastChunkY);
-				insertPlayerMove.setInt(4, infos.lastChunkZ);
+				insertPlayerMove.setObject(1, player.getUniqueId());
+				insertPlayerMove.setLong(2, time);
+				insertPlayerMove.setInt(3, infos.lastChunkX);
+				insertPlayerMove.setInt(4, infos.lastChunkY);
+				insertPlayerMove.setInt(5, infos.lastChunkZ);
 				insertPlayerMove.executeUpdate();
 			} catch (SQLException ex) {
 				ex.printStackTrace();
