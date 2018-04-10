@@ -84,7 +84,7 @@ public class PluginMain extends JavaPlugin {
 
 		getLogger().info("Création des tables inexistantes");
 		Statement s = conn.createStatement();
-		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlayerMoves (PlayerId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT)");
+		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlayerMoves (PlayerId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT, IsFlying BOOLEAN)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS Messages (Size INT)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS BrokenBlocks (Id INT, PlayerPlayTime LONG)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlacedBlocks (Id INT, PlayerPlayTime LONG)");
