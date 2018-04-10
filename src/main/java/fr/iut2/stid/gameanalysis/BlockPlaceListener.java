@@ -23,10 +23,9 @@ public class BlockPlaceListener implements Listener {
 		int b = evt.getBlockPlaced().getTypeId();
 
 		long ticks = p.getStatistic(Statistic.PLAY_ONE_TICK);
-		long minuts = ticks / 1200;
 		try {
 			insertBlockPlaceEvent.setInt(1, b);
-			insertBlockPlaceEvent.setLong(2, minuts);
+			insertBlockPlaceEvent.setLong(2, ticks);
 			insertBlockPlaceEvent.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

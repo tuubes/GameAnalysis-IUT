@@ -22,10 +22,9 @@ public class BlockBreakListener implements Listener {
 		int idblock = evt.getBlock().getTypeId();
 		Player player = evt.getPlayer();
 		long ticks = player.getStatistic(Statistic.PLAY_ONE_TICK);
-		long minute = ticks / 1200;
 		try {
 			insertBlockBreakEvent.setInt(1, idblock);
-			insertBlockBreakEvent.setLong(2, minute);
+			insertBlockBreakEvent.setLong(2, ticks);
 			insertBlockBreakEvent.executeUpdate();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
