@@ -1,4 +1,4 @@
-package fr.iut2.stid.gameanalysis;
+package fr.iut2.stid.gameanalysis.observation;
 
 import org.bukkit.Material;
 import org.bukkit.Statistic;

@@ -1,4 +1,4 @@
-package fr.iut2.stid.gameanalysis;
+package fr.iut2.stid.gameanalysis.observation;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
