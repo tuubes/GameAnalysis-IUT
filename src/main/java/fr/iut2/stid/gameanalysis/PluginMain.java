@@ -40,6 +40,9 @@ public class PluginMain extends JavaPlugin {
 			fatalError(ex, "Impossible de charger les évènements");
 		}
 
+		getLogger().info("Mise en place de la commande /sql");
+		getCommand("sql").setExecutor(new SqlCommand(conn));
+
 		getLogger().info("Plugin chargé !");
 		ok = true;
 	}

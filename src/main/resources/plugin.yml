@@ -1,3 +1,6 @@
 name: PluginTutoreIUT2
 version: 1.0
-main: fr.iut2.stid.gameanalysis.PluginMain
+main: fr.iut2.stid.gameanalysis.PluginMaincommands:
+  sql:
+    description: Exécute une requête SQL
+    usage: /sql <requete>
