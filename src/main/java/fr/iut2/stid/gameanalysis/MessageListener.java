@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public class MessageListener implements Listener {
 	private PreparedStatement insertMessageEvent;
@@ -17,10 +18,19 @@ public class MessageListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMessage(AsyncPlayerChatEvent evt) {
-		int nbmsg = evt.getMessage().length();
+		int size = evt.getMessage().length();
+		saveMessageSize(size);
+	}
 
+	@EventHandler
+	public void onPlayerCommand(PlayerCommandPreprocessEvent evt) {
+		int size = evt.getMessage().length();
+		saveMessageSize(size);
+	}
+
+	private void saveMessageSize(int size) {
 		try {
-			insertMessageEvent.setInt(1, nbmsg);
+			insertMessageEvent.setInt(1, size);
 			insertMessageEvent.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
