@@ -88,6 +88,7 @@ public class PluginMain extends JavaPlugin {
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS Messages (Size INT)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS BrokenBlocks (Id INT, PlayerPlayTime LONG)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlacedBlocks (Id INT, PlayerPlayTime LONG)");
+		s.executeUpdate("CREATE TABLE IF NOT EXISTS CreatedItems (Id INT, Amount INT, PlayerPlayTime LONG)");
 		s.close();
 	}
 
@@ -102,5 +103,6 @@ public class PluginMain extends JavaPlugin {
 		pm.registerEvents(new BlockBreakListener(conn), this);
 		pm.registerEvents(new BlockPlaceListener(conn), this);
 		pm.registerEvents(new PrivacyInformer(), this);
+		pm.registerEvents(new ItemCreationListener(conn), this);
 	}
 }
