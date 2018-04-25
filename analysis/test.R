@@ -25,18 +25,4 @@ print("disconnecting")
 dbDisconnect(conn2)
 
 
-library(RH2)
-print("loading h2")
-h2 <- H2(jars = "/home/guillaume/h2.jar")
 
-print("connecting to the database")
-conn <- dbConnect(h2, dbPath, "", "")
-
-print("executing requests")
-dbGetQuery(conn, "SHOW TABLES")
-
-dbGetQuery(conn, "SELECT * FROM MESSAGES")
-dbGetQuery(conn, "SELECT * FROM PlayerMoves")
-
-print("disconnecting")
-dbDisconnect(conn)
