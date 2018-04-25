@@ -10,8 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 /**
- * Listener pour les blocs cassés. Enregistre tous les blocs cassés chaque "ticks" (0,05sec)
- * @author Alexandre
+ * Listener pour les blocs cassés. Enregistre tous les blocs cassés avec leur id
+ * 
  */
 public class BlockBreakListener implements Listener {
 	private PreparedStatement insertBlockBreakEvent;
