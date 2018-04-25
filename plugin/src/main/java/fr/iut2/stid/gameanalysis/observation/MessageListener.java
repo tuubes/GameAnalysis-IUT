@@ -8,7 +8,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-
+/**
+ *Listener pour l'enregistrement de la taille des messages
+ *
+ */
 public class MessageListener implements Listener {
 	private PreparedStatement insertMessageEvent;
 
@@ -18,7 +21,7 @@ public class MessageListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMessage(AsyncPlayerChatEvent evt) {
-		int size = evt.getMessage().length();
+		int size = evt.getMessage().length(); //récupère la taille du message dans la variable size
 		saveMessageSize(size);
 	}
 

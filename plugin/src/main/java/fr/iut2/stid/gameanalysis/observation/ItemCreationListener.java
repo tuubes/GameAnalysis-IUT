@@ -16,7 +16,6 @@ import java.sql.SQLException;
 /**
  * Enregistre les objets ("items") créés par les joueurs.
  *
- * @author guillaume
  */
 public class ItemCreationListener implements Listener {
 	private final PreparedStatement insertCreatedItem;

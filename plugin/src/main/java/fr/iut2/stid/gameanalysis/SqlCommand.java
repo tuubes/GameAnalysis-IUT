@@ -6,7 +6,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.sql.*;
-
+/**
+ * Permet de faire des requêtes SQL directement depuis le jeu.
+ * @author Alexandre
+ *
+ */
 public class SqlCommand implements CommandExecutor {
 	private static final int RESULT_LIMIT = 15;
 	private Connection conn;
