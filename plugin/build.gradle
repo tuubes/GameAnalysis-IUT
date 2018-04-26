@@ -1,5 +1,5 @@
 apply plugin: 'java'
-version = '1.2'
+version = '1.2.1'
 
 // Dépôts fournissant les dépendances
 repositories {
@@ -16,8 +16,8 @@ configurations {
 
 // Dépendances du projet
 dependencies {
-	compile 'com.github.TheElectronWill.Night-Config:core:3.0.3' // Lib de configuration
-	compile 'com.github.TheElectronWill.Night-Config:toml:3.0.3' // Lib de configuration
+	compile 'com.github.TheElectronWill.Night-Config:core:3.0.4' // Lib de configuration
+	compile 'com.github.TheElectronWill.Night-Config:toml:3.0.4' // Lib de configuration
 	compile 'com.h2database:h2:1.4.196' // Base de données
 	provided 'org.bukkit:bukkit:1.10.2-R0.1-SNAPSHOT' // API Bukkit
 }

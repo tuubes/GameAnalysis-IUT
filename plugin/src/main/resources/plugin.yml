@@ -1,5 +1,5 @@
 name: PluginTutoreIUT2
-version: 1.2
+version: 1.2.1
 main: fr.iut2.stid.gameanalysis.PluginMain
 commands:
   sql:

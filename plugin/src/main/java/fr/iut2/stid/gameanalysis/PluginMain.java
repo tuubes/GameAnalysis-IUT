@@ -1,6 +1,7 @@
 package fr.iut2.stid.gameanalysis;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -26,16 +27,27 @@ public class PluginMain extends JavaPlugin {
 	 * qu'on essaierait de sauvegarder la base de données.
 	 */
 	private boolean ok = false;
-	
+
 	/** La configuration du plugin. */
 	private FileConfig config;
 
 	@Override
 	public void onEnable() {
 		getLogger().info("Chargement de la configuration");
-		File configFile = new File(getDataFolder(), "config.toml");
-		config = FileConfig.builder(configFile).defaultResource("/default_config.toml").build();
-		
+		try {
+			File configFile = new File(getDataFolder(), "config.toml");
+			if (!configFile.exists()) {
+				getDataFolder().mkdir();
+				Files.copy(getResource("defaultConfig.toml"), configFile.toPath());
+			}
+			config = FileConfig.of(configFile);
+			config.load();
+		} catch (Exception ex) {
+			fatalError(ex, "Impossible de charger la configuration");
+		}
+		getLogger().info(config.toString());
+		getLogger().info(config.valueMap().toString());
+
 		getLogger().info("Chargement de la base de données");
 		try {
 			initDatabase();
