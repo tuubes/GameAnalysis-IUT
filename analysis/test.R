@@ -13,7 +13,7 @@ drv <-
 
 # Connexion à la base de données. Attention ! Si elle n'existe pas, une BDD vide sera crée.
 print("connecting to the database")
-conn <- dbConnect(drv, "jdbc:h2:" + dbPath, "", "") # On récupère un objet conn qui nous servira par la suite
+conn <- dbConnect(drv, paste("jdbc:h2:", dbPath, sep=""), "", "") # On récupère un objet conn qui nous servira par la suite
 
 # --- Utilisation de la BDD ---
 print("executing requests")
