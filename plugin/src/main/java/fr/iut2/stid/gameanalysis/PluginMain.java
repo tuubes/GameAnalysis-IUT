@@ -10,6 +10,8 @@ import fr.iut2.stid.gameanalysis.observation.*;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.electronwill.nightconfig.core.file.FileConfig;
+
 /**
  * Classe principale du plugin.
  */
@@ -24,9 +26,16 @@ public class PluginMain extends JavaPlugin {
 	 * qu'on essaierait de sauvegarder la base de données.
 	 */
 	private boolean ok = false;
+	
+	/** La configuration du plugin. */
+	private FileConfig config;
 
 	@Override
 	public void onEnable() {
+		getLogger().info("Chargement de la configuration");
+		File configFile = new File(getDataFolder(), "config.toml");
+		config = FileConfig.builder(configFile).defaultResource("/default_config.toml").build();
+		
 		getLogger().info("Chargement de la base de données");
 		try {
 			initDatabase();
@@ -101,12 +110,15 @@ public class PluginMain extends JavaPlugin {
 	 * @throws SQLException si un erreur SQL survient dans la préparation des requêtes d'enregistrement des évènements dans la BDD
 	 */
 	private void registerEventListeners() throws SQLException {
+		boolean enablePrivacyMessage = config.get("privacy_message");
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new MoveListener(conn), this);
 		pm.registerEvents(new MessageListener(conn), this);
 		pm.registerEvents(new BlockBreakListener(conn), this);
 		pm.registerEvents(new BlockPlaceListener(conn), this);
-		pm.registerEvents(new PrivacyInformer(), this);
 		pm.registerEvents(new ItemCreationListener(conn), this);
+		if (enablePrivacyMessage) {
+			pm.registerEvents(new PrivacyInformer(), this);
+		}
 	}
 }
