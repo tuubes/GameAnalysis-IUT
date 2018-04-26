@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender;
 
 import java.sql.*;
 /**
- * Permet de faire des requêtes SQL directement depuis le jeu.
- * @author Alexandre
+ * Permet de faire des requêtes SQL directement depuis le jeu via le chat en tapant "/sql" suivi du nom de la requête 
+ *
  *
  */
 public class SqlCommand implements CommandExecutor {
@@ -17,6 +17,9 @@ public class SqlCommand implements CommandExecutor {
 
 	public SqlCommand(Connection conn) {
 		this.conn = conn;
+		/**
+		 * "conn" est l'objet qui représente la connexion à la base de donnée
+		 */
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 /**
- * Listener pour les placements de blocs. Enregistre tous les blocs placés chaque "tick" (0,05sec)
+ * Listener pour les placements de blocs. Enregistre tous les blocs placés avec leur id
  * @author Alexandre
  */
 public class BlockPlaceListener implements Listener {
@@ -25,7 +25,7 @@ public class BlockPlaceListener implements Listener {
 		Player p = evt.getPlayer();
 		int b = evt.getBlockPlaced().getTypeId(); // récupère l'id du bloc lorsqu'il est placé dans la variable "b"
 
-		long ticks = p.getStatistic(Statistic.PLAY_ONE_TICK);
+		long ticks = p.getStatistic(Statistic.PLAY_ONE_TICK);  // récupère le temps de jeu du joueur en "tick" (0,05sec)
 		try {
 			insertBlockPlaceEvent.setInt(1, b);
 			insertBlockPlaceEvent.setLong(2, ticks);

@@ -21,13 +21,13 @@ public class MessageListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMessage(AsyncPlayerChatEvent evt) {
-		int size = evt.getMessage().length(); //récupère la taille du message dans la variable size
+		int size = evt.getMessage().length(); //récupère la taille du message dans la variable size avec le nombre de caractères
 		saveMessageSize(size);
 	}
 
 	@EventHandler
 	public void onPlayerCommand(PlayerCommandPreprocessEvent evt) {
-		int size = evt.getMessage().length();
+		int size = evt.getMessage().length(); //récupère la taille de la commande depuis le jeu en nombre de caractères
 		saveMessageSize(size);
 	}
 
