@@ -1,11 +1,11 @@
 library(RJDBC)
 
 dbPath <-
-  "jdbc:h2:C:/Users/utilisateur/Desktop/Cours/Projet Tutoré/database"
+  "jdbc:h2:C:/Users/utilisateur/Desktop/Cours/Projet TutorÃ©/database"
 
 print("loading h2")
 drv <-
-  JDBC(driverClass = "org.h2.Driver", classPath = "C:/Users/utilisateur/Desktop/Cours/Projet Tutoré/h2.jar", identifier.quote="`")
+  JDBC(driverClass = "org.h2.Driver", classPath = "C:/Users/utilisateur/Desktop/Cours/Projet TutorÃ©/h2.jar", identifier.quote="`")
 
 print("connecting to the database")
 conn2 <- dbConnect(drv, dbPath, "", "")
@@ -37,7 +37,7 @@ summary(data$CLASS_TIME)
 nom_var1 <- "ID" ; var1 <- data[,nom_var1]
 nom_var2 <- "CLASS_TIME"; var2 <- data[,nom_var2]
 
-#1.a)création du tableau de contingence
+#1.a)crÃ©ation du tableau de contingence
 TAB_Nij <- table(var1,var2)
 
 table(var1)
@@ -60,22 +60,22 @@ PCT.CO <- sweep(TAB_Nij,2, TAB_N.j,"/")*100
 
 #Les graphiques
 
-#En juxtaposée de service sachant site
+#En juxtaposÃ©e de service sachant site
 barplot(TAB_Nij, beside=TRUE,legend.text=TRUE)
 
 
-#En empilés 100% de service sachant site
+#En empilÃ©s 100% de service sachant site
 q<-nlevels(var2) ; palette<-heat.colors(q) 
 barplot( t(PCT.LI), beside=FALSE ,legend.text=TRUE,
          col=palette, main= paste("Distribution de la variable",nom_var2,"sachant",nom_var1)) 
 
 
-#empilé 100% de site sachant service
+#empilÃ© 100% de site sachant service
 p<-nlevels(var2) ; palette<-heat.colors(p) 
 barplot( (PCT.CO), beside=FALSE ,legend.text=TRUE,
          col=palette(gray(seq(0, .9, len=25))), main= paste("Distribution de la variable",nom_var1,"sachant",nom_var2)) 
 
-#en juxtaposés de site sachant service
+#en juxtaposÃ©s de site sachant service
 
 barplot(t(TAB_Nij), beside=TRUE,legend.text=TRUE)
 

@@ -24,8 +24,8 @@ dbGetQuery(conn2, "SELECT * FROM PlayerMoves")
 
 
 ID<-dbGetQuery(conn2, "SELECT distinct(ID) FROM PlacedBlocks")
-NombreBlocPlacés<-dbGetQuery(conn2, "SELECT count(ID) FROM PlacedBlocks")
-InfoBlocPlacé<-dbGetQuery(conn2, "SELECT * FROM PlacedBlocks")
+NombreBlocPlacÃ©s<-dbGetQuery(conn2, "SELECT count(ID) FROM PlacedBlocks")
+InfoBlocPlacÃ©<-dbGetQuery(conn2, "SELECT * FROM PlacedBlocks")
 idJoueur<-dbGetQuery(conn2, "SELECT distinct(PLAYERID) FROM PLAYERMOVES")
 sommeTempJeu<-dbGetQuery(conn2, "SELECT sum(PLAYERPLAYTIME) as n FROM PlacedBlocks")
 dbGetQuery(conn2, "SELECT * FROM PlacedBlocks where group by ID ")
@@ -37,9 +37,9 @@ df<-data.frame(rbind(TAB1))
 df_final<-as.data.frame(t(df))
 df_final$freq<-df_final$TAB1/10680
 
-barplot( df_final$freq , main=paste("Distribution des types de blocs posés" ),  col="blue", ylab="Fréquences")  
+barplot( df_final$freq , main=paste("Distribution des types de blocs posÃ©s" ),  col="blue", ylab="FrÃ©quences")  
 ordre.dfreq<-order(df_final$freq,decreasing=TRUE) 
-barplot( df_final$freq[ordre.dfreq] , main=paste0("Distribution des types de blocs posés dans l'odres décroissant"),  col= "#3399FF" , ylab= "Fréquences" ) 
+barplot( df_final$freq[ordre.dfreq] , main=paste0("Distribution des types de blocs posÃ©s"),  col= "#3399FF" , ylab= "FrÃ©quences" ) 
 
 
 
