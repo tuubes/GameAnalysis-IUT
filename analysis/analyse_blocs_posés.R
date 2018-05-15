@@ -2,8 +2,8 @@
 library(RJDBC)
 
 # --- Paramètres---
-dbPath <- "/home/guillaume/database" # Chemin de la base de données, sans le .mv.db à la fin
-dbmsPath <- "/home/guillaume/h2.jar" # Chemin du SGBD (DBMS en anglais) .jar
+dbPath <- "C:/Users/pontcl/Downloads/database_bofas.mv.db" # Chemin de la base de données, sans le .mv.db à la fin
+dbmsPath <- "C:/Users/pontcl/Downloads/database_bofas.mv.db" # Chemin du SGBD (DBMS en anglais) .jar
 
 # --- Connexion à la BDD ---
 drv <- JDBC(driverClass = "org.h2.Driver", classPath = dbmsPath, identifier.quote="`")
@@ -13,9 +13,8 @@ conn <- dbConnect(drv, paste("jdbc:h2:", dbPath, sep=""), "", "") # On récupèr
 # Comptage des blocs placés, avec leur nom
 dbGetQuery(conn, "SELECT count(*) FROM placedblocks")
 data <- dbGetQuery(conn,
-"SELECT Name, count(PlacedBlocks.Id) FROM PlacedBlocks, ItemRegistry
-WHERE PlacedBlocks.Id = ItemRegistry.Id
-GROUP BY Name
+"SELECT ID, count(PlacedBlocks.Id) FROM PlacedBlocks
+GROUP BY ID
 ORDER BY count(PlacedBlocks.Id) DESC")
 #View(data)
 
