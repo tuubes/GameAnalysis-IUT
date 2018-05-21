@@ -73,9 +73,9 @@ public class MoveListener implements Listener {
 			insertEntitySpawn.setObject(1, entity.getUniqueId());
 			insertEntitySpawn.setObject(2, System.currentTimeMillis());
 			insertEntitySpawn.setString(3, type);
-			insertEntitySpawn.setInt(4, l.getBlockX());
-			insertEntitySpawn.setInt(5, l.getBlockY());
-			insertEntitySpawn.setInt(6, l.getBlockZ());
+			insertEntitySpawn.setInt(4, l.getBlockX()/16);
+			insertEntitySpawn.setInt(5, l.getBlockY()/16);
+			insertEntitySpawn.setInt(6, l.getBlockZ()/16);
 			insertEntitySpawn.executeUpdate();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
