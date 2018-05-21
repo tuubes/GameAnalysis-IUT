@@ -11,24 +11,36 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * Listener pour les déplacements des joueurs et des entités non-joueurs.
- * 
+ *
  * @author guillaume
  */
 public class MoveListener implements Listener {
 
 	private final PreparedStatement insertPlayerMove;
-	
-	/** Associe chaque entité à un objet EntityChunkInfos qui permet de détecter quand l'entité change de chunk */
-	private final Map<Entity, EntityChunkInfos> chunkInfos = new HashMap<>();
+	private final PreparedStatement insertEntitySpawn;
+	private final PreparedStatement insertEntityMove;
 
-	public MoveListener(Connection conn) throws SQLException {
+	/**
+	 * Associe chaque entité à un objet EntityChunkInfos qui permet de détecter quand l'entité change de chunk
+	 */
+	private final Map<Entity, EntityChunkInfos> chunkInfos = new HashMap<>();
+	private final Plugin plugin;
+
+	public MoveListener(Connection conn, Plugin plugin) throws SQLException {
+		this.plugin = plugin;
 		insertPlayerMove = conn.prepareStatement("INSERT INTO PlayerMoves VALUES(?,?,?,?,?,?)");
+		insertEntitySpawn = conn.prepareStatement("INSERT INTO EntitySpawns VALUES(?,?,?,?,?,?)");
+		insertEntityMove = conn.prepareStatement("INSERT INTO EntityMoves VALUES(?,?,?,?,?)");
 	}
 
+	/** Méthode appellée par le serveur lorsqu'un joueur se déplace. */
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent evt) {
 		Player player = evt.getPlayer();
@@ -48,6 +60,53 @@ public class MoveListener implements Listener {
 				ex.printStackTrace();
 			}
 		}
+	}
+
+	/** Méthode appellée par le serveur lorsqu'une entité non-joueur apparaît. */
+	@EventHandler
+	public void onEntitySpawn(CreatureSpawnEvent evt) {
+		// Enregistrement de l'apparition de l'entité, avec son type
+		Entity entity = evt.getEntity();
+		Location l = entity.getLocation();
+		String type = evt.getEntityType().toString();
+		try {
+			insertEntitySpawn.setObject(1, entity.getUniqueId());
+			insertEntitySpawn.setObject(2, System.currentTimeMillis());
+			insertEntitySpawn.setString(3, type);
+			insertEntitySpawn.setInt(4, l.getBlockX());
+			insertEntitySpawn.setInt(5, l.getBlockY());
+			insertEntitySpawn.setInt(6, l.getBlockZ());
+			insertEntitySpawn.executeUpdate();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		// Démarrage d'une tâche qui va enregistrer les changements de tronçon de l'entité à chaque mise à jour
+		EntityChunkInfos infos = new EntityChunkInfos(entity);
+		infos.update(entity.getLocation());
+		BukkitRunnable task = new BukkitRunnable() {
+			@Override
+			public void run() {
+				if (entity.isValid()) {
+					if (infos.update(entity.getLocation())) {
+						long time = System.currentTimeMillis();
+						try {
+							insertEntityMove.setObject(1, entity.getUniqueId());
+							insertEntityMove.setLong(2, time);
+							insertEntityMove.setInt(3, infos.lastChunkX);
+							insertEntityMove.setInt(4, infos.lastChunkY);
+							insertEntityMove.setInt(5, infos.lastChunkZ);
+							insertEntityMove.executeUpdate();
+						} catch (SQLException ex) {
+							ex.printStackTrace();
+						}
+					}
+				} else {
+					// L'entité n'existe plus
+					cancel();
+				}
+			}
+		};
+		task.runTaskTimer(plugin, 1, 1);
 	}
 
 	private class EntityChunkInfos {

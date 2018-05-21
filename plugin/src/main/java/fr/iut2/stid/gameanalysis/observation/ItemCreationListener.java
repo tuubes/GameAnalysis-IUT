@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 /**
  * Enregistre les objets ("items") créés par les joueurs.
- *
  */
 public class ItemCreationListener implements Listener {
 	private final PreparedStatement insertCreatedItem;
@@ -24,6 +23,7 @@ public class ItemCreationListener implements Listener {
 		insertCreatedItem = conn.prepareStatement("INSERT INTO CreatedItems VALUES (?,?,?)");
 	}
 
+	/** Méthode appellée par le serveur lorsqu'un joueur fabrique un object dans un atelier. */
 	@EventHandler
 	public void onPlayerCraft(CraftItemEvent evt) {
 		ItemStack result = evt.getInventory().getResult();
@@ -31,6 +31,7 @@ public class ItemCreationListener implements Listener {
 		saveCreatedItem(player, result.getType(), result.getAmount());
 	}
 
+	/** Méthode appellée lorsqu'un joueur utilise un fourneau. */
 	@EventHandler
 	public void onPlayerUseFurnace(FurnaceExtractEvent evt) {
 		saveCreatedItem(evt.getPlayer(), evt.getItemType(), evt.getItemAmount());

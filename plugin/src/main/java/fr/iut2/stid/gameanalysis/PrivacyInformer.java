@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
  * @author guillaume
  */
 public class PrivacyInformer implements Listener {
+	/** Méthode appellée par le serveur lorsqu'un joueur se connecte */
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent evt) {
 		evt.getPlayer().sendMessage("En jouant sur ce serveur, vous acceptez que des informations concernant vos actions "
