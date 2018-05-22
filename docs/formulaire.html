@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<!-- En-tête du document -->
+<head>
+	<meta charset="utf-8" />
+	<meta name="Language" content="fr" />
+	<meta name="Description" content="Avis - Projet Tutoré Minecraft" />
+	<title>Projet Tutoré Minecraft</title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+<!-- Corps du document -->
+<body>
+	<header>
+		<!-- Barre de navigation -->
+		<nav>
+			<ul>
+				<li><a href="index.html">Accueil</a></li>
+				<li><a href="démarche.html">Démarche</a></li>
+				<li><a href="gestion-projet.html">Gestion de Projet</a></li>
+				<li><a href="résultats.html">Résultats</a></li>
+			</ul>
+		</nav>
+	</header>
+
+	<section>
+		<form method="get" action="#">
+			<fieldset>
+				<h2>À propos de vous</h2>
+				<label>Vous êtes :</label>
+				<label for="catEns">Enseignant(e)</label>
+				<input type="radio" name="categorie" value="ens" id="catEns" required/>
+
+				<label for="catEtu">Étudiant(e)</label>
+				<input type="radio" name="categorie" value="etu" id="catEtu"/>
+
+				<label for="catPro">Professionnel(le)</label>
+				<input type="radio" name="categorie" value="pro" id="catPro"/>
+
+				<label for="catAutre">Autre</label>
+				<input type="radio" name="categorie" value="autre" id="catAutre"/>
+				<br/>
+				<label for="stid">Faites-vous partie de STID ou étudiez-vous à STID Grenoble ?</label>
+				<label for="stidOui">Oui</label>
+				<input type="radio" name="stid" value="true" id="stidOui"/>
+
+				<label for="stidNon">Non</label>
+				<input type="radio" name="stid" value="false" id="stidNon" required/>
+			</fieldset>
+			<fieldset>
+				<h2>À propos du projet</h2>
+				<label>Que pensez-vous du type d'événements enregistrés ?</label>
+				<input type="text" name="events" value=""><br/>
+				<label>Que pensez-vous de la programmation du plugin ?</label>
+				<input type="text" name="prog" value=""><br/>
+				<label>Que pensez-vous de l'analyse des données ?</label>
+				<input type="text" name="analyse" value=""><br/>
+				<label>Que pensez-vous du projet dans sa globalité : </label>
+				<input type="text" name="global" value=""><br/>
+				<!-- TODO: range with marks -->
+			</fieldset>
+			<fieldset>
+				<h2>Suggestions</h2>
+				<label>Des suggestions concernant :</label><br/>
+				<input type="checkbox" name="sugg" id="suggProg" />
+				<label for="stat">La programmation du plugin</label><br/>
+				<input type="checkbox" name="sugg" id="suggStat"/>
+				<label for="info">Le traitement statistique des données</label><br/>
+				<input type="checkbox" name="sugg" id="suggWeb" />
+				<label for="bi">Le site web du projet tutoré</label><br/>
+				<input type="checkbox" name="sugg" id="suggAutre" />
+				<label for="bi">D'autres choses</label><br/>
+
+				<label>Vos suggestions :</label></br>
+				<textarea name="suggestions" rows="20" cols="80"></textarea>
+			</fieldset>
+		</form>
+	</section>
+
+	<footer>
+
+	</footer>
+</body>
+</html>
