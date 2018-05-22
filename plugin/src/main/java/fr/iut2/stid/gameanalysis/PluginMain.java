@@ -114,6 +114,9 @@ public class PluginMain extends JavaPlugin {
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS BrokenBlocks (Id INT, PlayerPlayTime LONG)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS PlacedBlocks (Id INT, PlayerPlayTime LONG)");
 		s.executeUpdate("CREATE TABLE IF NOT EXISTS CreatedItems (Id INT, Amount INT, PlayerPlayTime LONG)");
+		s.executeUpdate("CREATE TABLE IF NOT EXISTS ConsumedItems (Id INT, PlayerPlayTime LONG)");
+		s.executeUpdate("CREATE TABLE IF NOT EXISTS EntityMoves (EntityId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT)");
+		s.executeUpdate("CREATE TABLE IF NOT EXISTS EntitySpawns (EntityId UUID, Time LONG, EntityType VARCHAR, ChunkX INT, ChunkY INT, ChunkZ INT)");
 		s.close();
 	}
 
@@ -124,11 +127,12 @@ public class PluginMain extends JavaPlugin {
 	private void registerEventListeners() throws SQLException {
 		boolean enablePrivacyMessage = config.get("privacy_message");
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new MoveListener(conn), this);
+		pm.registerEvents(new MoveListener(conn, this), this);
 		pm.registerEvents(new MessageListener(conn), this);
 		pm.registerEvents(new BlockBreakListener(conn), this);
 		pm.registerEvents(new BlockPlaceListener(conn), this);
 		pm.registerEvents(new ItemCreationListener(conn), this);
+		pm.registerEvents(new ItemConsumeListener(conn), this);
 		if (enablePrivacyMessage) {
 			pm.registerEvents(new PrivacyInformer(), this);
 		}

@@ -6,22 +6,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.sql.*;
+
 /**
- * Permet de faire des requêtes SQL directement depuis le jeu via le chat en tapant "/sql" suivi du nom de la requête 
- *
- *
+ * Permet de faire des requêtes SQL directement depuis le jeu via le chat en tapant "/sql requête".
  */
 public class SqlCommand implements CommandExecutor {
+	/** Nombre max de résultats affichés lors d'un SELECT */
 	private static final int RESULT_LIMIT = 15;
 	private Connection conn;
 
 	public SqlCommand(Connection conn) {
 		this.conn = conn;
-		/**
-		 * "conn" est l'objet qui représente la connexion à la base de donnée
-		 */
 	}
 
+	/**
+	 * Méthode appellée par le serveur lorsque la commande est exécutée
+	 * @param sender l'entité qui exécute la commande
+	 * @param command l'objet commande
+	 * @param label l'alias utilisé pour exécuter la commande (voir plugin.yml)
+	 * @param args les arguments donnés à la commande
+	 * @return true pour valider l'exécution de la commande
+	 */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (sender.hasPermission("iut.sql")) {
@@ -42,6 +47,7 @@ public class SqlCommand implements CommandExecutor {
 		return !(l.startsWith("select") || l.equals("show tables"));
 	}
 
+	/** Exécute une requête sql et envoie les résultats au CommandSender s */
 	private void executeSql(CommandSender s, String sql) {
 		try (Statement statement = conn.createStatement()) {
 			boolean hasResultSet = statement.execute(sql);

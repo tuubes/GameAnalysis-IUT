@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+
 /**
- * Listener pour les blocs cassés. Enregistre tous les blocs cassés avec leur id
- * 
+ * Listener pour les blocs cassés. Enregistre tous les blocs cassés avec leur id.
  */
 public class BlockBreakListener implements Listener {
 	private PreparedStatement insertBlockBreakEvent;
@@ -20,6 +20,7 @@ public class BlockBreakListener implements Listener {
 		insertBlockBreakEvent = conn.prepareStatement("INSERT INTO BrokenBlocks VALUES (?,?)");
 	}
 
+	/** Méthode appellée par le serveur lorsqu'un bloc est cassé par un joueur */
 	@EventHandler
 	public void onPlayerBlockBreak(BlockBreakEvent evt) {
 		int idblock = evt.getBlock().getTypeId(); // récupère l'id du bloc lorsqu'il est cassé dans la variable "idblock"
