@@ -2,75 +2,101 @@
 <html>
 
 <!-- En-tête du document -->
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="Language" content="fr" />
-	<meta name="Description" content="Accueil - Projet Tutoré Minecraft"/>
+	<meta name="Description" content="Accueil - Projet Tutoré Minecraft" />
 	<title>Projet Tutoré Minecraft</title>
-	<link rel="stylesheet" href="style.css" />
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
+
+	<!-- Icônes FontAwesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+	<!-- Notre CSS -->
+	<link rel="stylesheet" href="js/style2.css" />
 </head>
 <!-- Corps du document -->
+
 <body>
-	<header>
+	<header class="header">
 		<!-- Barre de navigation -->
-		<nav>
-			<ul>
-				<li><a href="démarche.html">Démarche Technique</a></li>
-				<li><a href="gestion-projet.html">Gestion de Projet</a></li>
-				<li><a href="résultats.html">Résultats</a></li>
-				<li><a href="formulaire.html">Avis</a></li>
-			</ul>
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top">
+			<!-- Brand -->
+			<a class="navbar-brand" href="#">Navbar</a>
+
+			<!-- Toggler/collapsibe Button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#theNavbar">
+				<i class="fa fa-bars"></i>
+  		</button>
+			<!-- Liens vers les pages du site -->
+			<div class="collapse navbar-collapse" id="theNavbar">
+				<ul class="navbar-nav ml-auto">
+					<li class="navbar-item"><a class="nav-link" href="démarche.html">Démarche Technique</a></li>
+					<li class="navbar-item"><a class="nav-link" href="gestion-projet.html">Gestion de Projet</a></li>
+					<li class="navbar-item"><a class="nav-link" href="résultats.html">Résultats</a></li>
+					<li class="navbar-item"><a class="nav-link" href="formulaire.html">Avis</a></li>
+				</ul>
+			</div>
 		</nav>
+		<!-- par dessus l'image -->
+		<div class="overlay container">
+			<h1>Test d'overlay basique</h1>
+		</div>
 	</header>
 
 	<section>
 		<h1>Projet Tutoré Minecraft</h1>
 		<h2>Les objectifs du projet</h2>
-		<p>Notre projet tutoré consiste à analyser le comportement des joueurs sur le jeu Minecraft
-			afin de répondre aux besoins du commanditaire, l’organisation Tuubes, qui développe un logiciel serveur pour Minecraft. Ces besoins sont au nombre de deux :
-Optimiser sa gestion du temps en se concentrant d’abord sur les éléments les plus utilisés du jeu.
- En effet, le jeu comporte de très nombreux éléments (255 blocs et 277 objets, 83 entités non-joueurs, des bâtiments ou lieux spéciaux, etc.)
- ajoutés au fur et à mesure des différentes versions.
- Il n’est pas possible de travailler sur tout cela en même temps, il faut donc judicieusement choisir pour que le logiciel soit utilisable le plus tôt possible.
-Comprendre le comportement des entités joueurs, et si possible non-joueurs (animaux, monstres), afin d’optimiser le fonctionnement du serveur.
- Par exemple, s’il était possible de prévoir une large part des déplacements des joueurs, le chargement des blocs du jeu pourrait être optimisé en conséquence.
-L’objectif de ce projet tutoré est donc fournir des données statistiques utiles au commanditaire.
-
-		 </p>
+		<p>Notre projet tutoré consiste à analyser le comportement des joueurs sur le jeu Minecraft afin de répondre aux besoins du commanditaire, l’organisation Tuubes, qui développe un logiciel serveur pour Minecraft. Ces besoins sont au nombre de deux : Optimiser
+			sa gestion du temps en se concentrant d’abord sur les éléments les plus utilisés du jeu. En effet, le jeu comporte de très nombreux éléments (255 blocs et 277 objets, 83 entités non-joueurs, des bâtiments ou lieux spéciaux, etc.) ajoutés au fur et
+			à mesure des différentes versions. Il n’est pas possible de travailler sur tout cela en même temps, il faut donc judicieusement choisir pour que le logiciel soit utilisable le plus tôt possible. Comprendre le comportement des entités joueurs, et si
+			possible non-joueurs (animaux, monstres), afin d’optimiser le fonctionnement du serveur. Par exemple, s’il était possible de prévoir une large part des déplacements des joueurs, le chargement des blocs du jeu pourrait être optimisé en conséquence.
+			L’objectif de ce projet tutoré est donc fournir des données statistiques utiles au commanditaire.
+		</p>
 
 	</section>
 	<section>
 		<h2> Les membres du projet	</h2>
 		<div class="">
 			<p> Alexandre FAZIO</p>
-			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo"/>
+			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo" />
 		</div>
 		<div class="">
 			<p> Rayan MOISSONNIER</p>
-			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo"/>
+			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo" />
 		</div>
 		<div class="">
 			<p> Clarisse PONT</p>
-			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo"/>
+			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo" />
 		</div>
 		<div class="">
 			<p> Guillaume RAFFIN</p>
-			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo"/>
+			<img src="images/logo_stid.jpg" alt="Logo de STID" id="logo" />
 		</div>
 
 
 
 		<h2> Les tuteurs	</h2>
 		<p>
-			Vincent Brault
-			Sophie Dupuy-Chessa
+			Vincent Brault Sophie Dupuy-Chessa
 		</p>
 		<h2> Le commanditaire </h2>
 		<p> TUUBES </p>
 	</section>
 
 	<footer>
-
+		<div class="container-fluid">
+			<div class="row justify-content-center">
+				<a class="nav-link" href="http://www.stid-grenoble.fr/">Département STID</a>
+			</div>
+		</div>
 	</footer>
+	<!-- Scripts Bootstrap, nécessaires pour le bon fonctionnement de certains éléments -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </body>
+
 </html>
