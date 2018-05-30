@@ -7,20 +7,30 @@
 	<meta name="Language" content="fr" />
 	<meta name="Description" content="Démarche - Projet Tutoré Minecraft" />
 	<title>Projet Tutoré Minecraft</title>
-	<link rel="stylesheet" href="style.css" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+	<link rel="stylesheet" href="js/style.css" />
 </head>
 <!-- Corps du document -->
 <body>
 	<header>
 		<!-- Barre de navigation -->
-		<nav>
-			<ul>
-				<li><a href="index.html">Accueil</a></li>
-				<li><a href="démarche.html">Démarche</a></li>
-				<li><a href="gestion-projet.html">Gestion de Projet</a></li>
-				<li><a href="résultats.html">Résultats</a></li>
-				<li><a href="formulaire.html">Avis</a></li>
-			</ul>
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top">
+			<!-- Brand -->
+			<a class="navbar-brand" href="#">Navbar</a>
+			<!-- Toggler/collapsibe Button -->
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#theNavbar">
+				<i class="fa fa-bars"></i>
+  		</button>
+			<!-- Liens vers les pages du site -->
+			<div class="collapse navbar-collapse" id="theNavbar">
+				<ul class="navbar-nav ml-auto">
+					<li class="navbar-item"><a class="nav-link" href="index.html">Accueil</a></li>
+					<li class="navbar-item"><a class="nav-link" href="gestion-projet.html">Gestion de Projet</a></li>
+					<li class="navbar-item"><a class="nav-link" href="résultats.html">Résultats</a></li>
+					<li class="navbar-item"><a class="nav-link" href="formulaire.html">Avis</a></li>
+				</ul>
+			</div>
 		</nav>
 	</header>
 
