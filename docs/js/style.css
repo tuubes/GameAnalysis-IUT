@@ -38,3 +38,7 @@ a {
 a:hover {
   color: #009FE3;
 }
+
+.after-navbar {
+  padding-top: 70px;
+}
