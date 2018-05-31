@@ -8,9 +8,9 @@ Les données récoltées sont enregistrées dans une base de données locale gé
 
 ### Mouvements
 
-- `PlayerMoves (PlayerId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT, IsFlying BOOLEAN)`
-- `EntityMoves (EntityId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT)`
-- `EntitySpawns (EntityId UUID, Time LONG, EntityType VARCHAR, ChunkX INT, ChunkY INT, ChunkZ INT)`
+- `PlayerMoves (PlayerId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT, IsFlying BOOLEAN)` : déplacements inter-chunks des joueurs
+- `EntityMoves (EntityId UUID, Time LONG, ChunkX INT, ChunkY INT, ChunkZ INT)` : déplacements inter-chunks des entités
+- `EntitySpawns (EntityId UUID, Time LONG, EntityType VARCHAR, ChunkX INT, ChunkY INT, ChunkZ INT)` : apparitions des entités
 
 Variables :
 
@@ -18,6 +18,7 @@ Variables :
 - `Time` : nombre de millisecondes depuis le 1er Janvier 1970 jusqu'à l'instant où s'est produit l'évènement; *quantitative continue*.
 - `ChunkX, ChunkY, ChunkZ` : coordonnées du chunk du joueur/de l'entité. Un "chunk" est un tronçon cubique de 16x16x16 blocs. Le premier tronçon contient les blocs (0,0,0) jusqu'à (15,15,15) inclus. Ce premier chunk a pour coordonnées (chunkX=0, chunkY=0, chunkZ=0). *Quantitative*
 - `IsFlying` : booléan, TRUE si le joueur est en train de voler, FALSE sinon. *Qualitative nominale*
+- `EntityType` : type de l'entité, sous forme de chaîne de caractères.
 
 
 
