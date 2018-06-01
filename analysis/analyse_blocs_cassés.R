@@ -4,7 +4,7 @@
 library(RJDBC)
 
 # --- Paramètres---
-dbPath <- "C:/Users/utilisateur/Desktop/Cours/Projet Tutoré/database_bofas" # Chemin de la base de données, sans le .mv.db à la fin
+dbPath <- "C:/Users/utilisateur/Desktop/Cours/Projet Tutoré/database_julien" # Chemin de la base de données, sans le .mv.db à la fin
 dbmsPath <- "C:/Users/utilisateur/Desktop/Cours/Projet Tutoré/h2.jar" # Chemin du SGBD (DBMS en anglais) .jar
 
 # --- Connexion à la BDD ---
@@ -14,7 +14,10 @@ conn <- dbConnect(drv, paste("jdbc:h2:", dbPath, sep=""), "", "") # On récupèr
 # --- Analyses statistiques ---
 # Comptage des blocs placés, avec leur nom
 dbGetQuery(conn, "SELECT count(*) FROM BrokenBlocks")
-1
+data <- dbGetQuery(conn,
+                   "SELECT ID, count(BrokenBlocks.Id) FROM BrokenBlocks
+                   GROUP BY ID
+                   ORDER BY count(BrokenBlocks.Id) DESC")
 # Nombre de blocs différents
 n <- dbGetQuery(conn, "SELECT count(distinct(Id)) FROM BrokenBlocks")
 n
@@ -24,7 +27,7 @@ a <- 7
 biggestData <- data[data$`COUNT(BROKENBLOCKS.ID)`>=a, ]
 smallestData <- data[data$`COUNT(BROKENBLOCKS.ID)`<a, ]
 
-barplot(names.arg=biggestData$NAME, height=biggestData$`COUNT(BROKENBLOCKS.ID)`, las=3, col="skyblue", main="Blocs cassés plus de 7 fois")
+barplot(names.arg=biggestData$ID, height=biggestData$`COUNT(BROKENBLOCKS.ID)`, las=3, col="skyblue", main="Blocs cassés plus de 7 fois")
 #View(smallestData)
 
 limit <- 10
