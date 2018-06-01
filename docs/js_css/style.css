@@ -1,8 +1,6 @@
 /* -- Barre de navigation -- */
 .navbar {
   background-color: #36b030;
-  /*background-color: transparent;*/
-  /*background-image: url('../img/grass_and_stone.jpg');*/
   background-size: cover;
 }
 .navbar-dark .navbar-nav .nav-link {
@@ -20,18 +18,35 @@
   /*background-attachment: fixed;*/
   background-size: cover;
   background-position: center;
-  height: 100vh; /* 1 vh = 1% de la "viewport height"*/
+  height: 100vh; /* 1 vh = 1% de la "viewport height" càd de la hauteur de la zone d'affichage */
 }
 
-.overlay h1 {
+.transparent-bg {
+  background-color: transparent;
+  transition: background-color 1s ease 0s; /* Transition coloré->transparent */
+}
+
+.colored-bg {
+  background-color: #36b030;
+  transition: background-color 1s ease 0s; /* Transition transparent->coloré*/
+}
+
+.overlay {
   color: #36b030;
   text-shadow: 0px 0px 20px #36b030;
-  font-weight: 900;
+
   vertical-align: center;
   text-align: center;
-  padding: 30vh 0;
+}
+.overlay h1 {
+  padding-top: 20vh;
+}
+.overlay h2 {
+  font-weight: normal;
+  margin: 0 0;
 }
 
+/* Assure que les éléments soient après la navbar */
 .after-navbar {
   padding-top: 50px;
 }
@@ -56,6 +71,10 @@ a:hover {
   color: #009FE3;
 }
 
+h1 {
+  font-weight: 900;
+  font-style: bold;
+}
 h2 {
   margin-top: 40px;
   margin-bottom: 15px;
