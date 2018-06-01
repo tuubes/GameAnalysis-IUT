@@ -1,5 +1,5 @@
+/* -- Barre de navigation -- */
 .navbar {
-  /*background-color: #82b74b !important;*/
   background-color: #36b030;
   /*background-color: transparent;*/
   /*background-image: url('../img/grass_and_stone.jpg');*/
@@ -13,23 +13,39 @@
   margin-left: 20px;
 }
 
+/* -- Première page avec un paysage du jeu et du texte par dessus -- */
 .header-landpage {
-  background-image: url('../img/minecraft_landscape.png');
+  /*background-image: url('../img/minecraft_landscape.png');*/
+  background-image: url('../img/hd_village.png');
   /*background-attachment: fixed;*/
   background-size: cover;
   background-position: center;
   height: 100vh; /* 1 vh = 1% de la "viewport height"*/
 }
 
-.overlay {
-  color: #ff0000;
+.overlay h1 {
+  color: #36b030;
+  font-weight: 900;
   vertical-align: center;
   text-align: center;
   padding: 30vh 0;
 }
 
+.after-navbar {
+  padding-top: 50px;
+}
+
+/* -- Pied de page -- */
 footer {
+  margin-top: 50px;
   background-color: #5A381E;
+}
+
+/* -- Polices et couleurs -- */
+body {
+  font-family: "Raleway", Helvetica, sans-serif;
+  font-size: 13pt;
+  background-color: #F5F5F5;
 }
 
 a {
@@ -39,6 +55,29 @@ a:hover {
   color: #009FE3;
 }
 
-.after-navbar {
-  padding-top: 70px;
+h2 {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  font-style: bold;
 }
+
+/* -- Images et boxes -- */
+img.round-small {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+}
+
+img.small {
+  height: 100px;
+}
+
+.box {
+  padding: 1em;
+  border: solid 1px #afafaf;
+  border-radius: 4px;
+  text-align: center;
+  background-color: #ffffff;
+}
+
