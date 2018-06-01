@@ -16,30 +16,38 @@
 <body class="after-navbar">
 	<header>
 		<!-- Barre de navigation -->
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top">
-			<!-- Brand -->
-			<a class="navbar-brand" href="#">Navbar</a>
-			<!-- Toggler/collapsibe Button -->
+		<nav id="navig" class="navbar navbar-expand-lg navbar-dark fixed-top">
+			<!-- Sur les petits écrans : bouton pour afficher le menu de navigation -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#theNavbar">
 				<i class="fa fa-bars"></i>
   		</button>
 			<!-- Liens vers les pages du site -->
-			<div class="collapse navbar-collapse" id="theNavbar">
-				<ul class="navbar-nav ml-auto">
+			<div class="collapse navbar-collapse justify-content-center" id="theNavbar">
+				<ul class="navbar-nav">
 					<li class="navbar-item"><a class="nav-link" href="index.html">Accueil</a></li>
 					<li class="navbar-item"><a class="nav-link" href="démarche.html">Démarche Technique</a></li>
 					<li class="navbar-item"><a class="nav-link" href="gestion-projet.html">Gestion de Projet</a></li>
+					<li class="navbar-item"><a class="nav-link nav-current" href="résultats.html">Résultats</a></li>
 					<li class="navbar-item"><a class="nav-link" href="formulaire.html">Avis</a></li>
 				</ul>
 			</div>
 		</nav>
 	</header>
 
-	<section>
+	<section class="container">
 	</section>
 
 	<footer>
-
+		<div class="container-fluid">
+			<div class="row justify-content-center">
+					<a class="nav-link" href="http://www.stid-grenoble.fr/">STID Grenoble</a>
+					<a class="nav-link" href="https://tuubes.org">Projet Tuubes</a>
+					<a class="nav-link" href="https://github.com/tuubes/GameAnalysis-IUT">Notre code source</a>
+			</div>
+		</div>
 	</footer>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </body>
 </html>
