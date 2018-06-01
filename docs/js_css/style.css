@@ -101,6 +101,31 @@ img.small {
   background-color: #ffffff;
   margin-bottom: 1.5em;
 }
-.box p {
+.box p:first-of-type {
   margin-top: 1.5em;
+}
+
+div.reactive-green:hover {
+  background-color: #36b030;
+  transition: background-color 1s ease 0s;
+}
+div.reactive-blue:hover {
+  background-color: #009FE3;
+  transition: background-color 1s ease 0s;
+}
+
+p.reactive-blue {
+  color: #009FE3;
+}
+div:hover > p.reactive-blue {
+  color: white;
+  transition: color 1s ease 0s;
+}
+
+p.reactive-green {
+  color: #36b030;
+}
+div:hover > p.reactive-green {
+  color: white;
+  transition: color 1s ease 0s;
 }
