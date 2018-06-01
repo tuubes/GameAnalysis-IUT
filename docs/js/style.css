@@ -25,6 +25,7 @@
 
 .overlay h1 {
   color: #36b030;
+  text-shadow: 0px 0px 20px #36b030;
   font-weight: 900;
   vertical-align: center;
   text-align: center;
@@ -79,5 +80,8 @@ img.small {
   border-radius: 4px;
   text-align: center;
   background-color: #ffffff;
+  margin-bottom: 1.5em;
 }
-
+.box p {
+  margin-top: 1.5em;
+}
