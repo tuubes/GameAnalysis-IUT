@@ -11,6 +11,24 @@
   margin-left: 20px;
 }
 
+.navbar-toggler {
+  height: 40px;
+}
+
+.nav-current::before {
+  content: "\f105  "; /* fa-angle-right */
+  font-family: "Font Awesome 5 Free";
+  font-style: normal;
+  font-weight: 900;
+}
+
+.nav-current::after {
+  content: "  \f104"; /* fa-angle-left */
+  font-family: "Font Awesome 5 Free";
+  font-style: normal;
+  font-weight: 900;
+}
+
 /* -- Première page avec un paysage du jeu et du texte par dessus -- */
 .header-landpage {
   /*background-image: url('../img/minecraft_landscape.png');*/
