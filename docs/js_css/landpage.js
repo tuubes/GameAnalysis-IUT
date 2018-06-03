@@ -17,3 +17,10 @@ window.addEventListener('resize', updateNav, false)
 
 /* Appelle updateNav() quand l'utilisateur se déplace dans la page */
 window.addEventListener('scroll', updateNav, false)
+
+/* Appelle updateNav() quand l'utilisateur active le bouton
+   d'affichage de la navbar (petits écrans uniquement) */
+function updateDelayed() {
+  setTimeout(updateNav, 300)
+}
+document.getElementById('theToggler').addEventListener('click', updateDelayed, false)
