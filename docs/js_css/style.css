@@ -3,6 +3,8 @@
   --main-color: #36b030;
   --second-color: #009FE3;
   --dark-color: #5A381E;
+  --lig-color: #10a9bf;
+  --ljk-color: #5b6682;
 }
 /* -- Barre de navigation -- */
 .navbar {
@@ -150,6 +152,14 @@ div.reactive-blue:hover {
   background-color: var(--second-color);
   transition: background-color 1s ease 0s;
 }
+div.reactive-lig:hover {
+  background-color: var(--lig-color);
+  transition: background-color 1s ease 0s;
+}
+div.reactive-ljk:hover {
+  background-color: var(--ljk-color);
+  transition: background-color 1s ease 0s;
+}
 
 p.reactive-green {
   color: var(--main-color);
@@ -164,4 +174,26 @@ p.reactive-blue {
 div:hover > p.reactive-blue {
   color: white;
   transition: color 1s ease 0s;
+}
+p.reactive-lig {
+  color: var(--lig-color);
+}
+div:hover > p.reactive-lig {
+  color: white;
+  transition: color 1s ease 0s;
+}
+p.reactive-ljk {
+  color: var(--ljk-color);
+}
+div:hover > p.reactive-ljk {
+  color: white;
+  transition: color 1s ease 0s;
+}
+
+div:hover > * > img.reactive-white {
+  /* Colore toutes les parties non transparentes de l'image en blanc */
+  filter: brightness(0) invert(1);
+  -webkit-filter: brightness(0) invert(1);
+  /* Transition du filter pour un changement progressif */
+  transition: 1s filter ease, 1s -webkit-filter ease;
 }
