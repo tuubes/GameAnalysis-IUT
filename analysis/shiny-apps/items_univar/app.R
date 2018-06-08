@@ -40,6 +40,8 @@ dataJulien <- list(dbGetQuery(connJulien, sqlBroken),
                    #,dbGetQuery(connJulien, sqlConsumed)
                    )
 
+dataColors <- dbGetQuery(connBofas, "SELECT Name, Color FROM ItemRegistry")
+
 # View(dataBofas[[1]])
 # View(dataBofas[[3]])
 
@@ -82,7 +84,7 @@ ui <- fluidPage(
                     value=TRUE)
     ),
     
-    mainPanel(plotOutput("chart", height=500))
+    mainPanel(plotOutput("chart", height=600))
   )
 )
 
@@ -155,19 +157,25 @@ server <- function(input, output, session) {
     }
     data <- filteredData()
     if(input$usePercent) {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount())
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount(), fill=NAME)
       end <- scale_y_continuous(label=scales::percent)
       ylabel <- "% utilisation"
     } else {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT)
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT, fill=NAME)
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
+    # Vecteur contenant les couleurs
+    vColors <- dataColors$COLOR
+    names(vColors) <- dataColors$NAME # vecteur nommé, avec le nom des types
+
+    # Graphique avec ggplot2
     ggplot(data, a) +
       geom_bar(stat="identity") +
       ggtitle(title) +
       xlab("Type") +
       ylab(ylabel) +
+      scale_fill_manual(values = vColors) +
       end
   })
   
