@@ -71,6 +71,8 @@ public class IdConverter {
 	    return "#FFFF0B";
     } else if(lower.contains("glass")) {
 	    return "#A8C9CE";
+    } else if(lower.contains("fence")) {
+	    return "#bd9a64";
     }
 	  return colorsMap.getOrDefault(type, "#009FF0"); // #595959 = gris, #009FF0 = bleu ciel
   }
@@ -83,13 +85,14 @@ public class IdConverter {
     colorsMap.put("Wheat Crops", "#D5DA45");
     colorsMap.put("Bread", "#D5DA45");
     colorsMap.put("Leaves", "#3E9C15");
+    colorsMap.put("Sapling", "#3E9C15");
     colorsMap.put("Gravel", "#8D8D8D");
     colorsMap.put("Redstone", "#FD0000");
     colorsMap.put("Bricks", "#ed2f00");
     colorsMap.put("Torch", "#FF8F00");
+    colorsMap.put("Fire", "#FF8F00");
     colorsMap.put("Stick", "#473821");
     colorsMap.put("Steak", "#D42A2A");
-    colorsMap.put("Fence", "#bd9a64");
     colorsMap.put("Sign", "#bd9a64");
   }
 }
