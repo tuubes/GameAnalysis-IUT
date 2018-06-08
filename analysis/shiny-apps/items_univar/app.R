@@ -2,7 +2,7 @@
 # Shiny Web App - Blocs et items, stats univariées
 # (c) Guillaume Raffin 2018
 #
-# Packages nécessaires : shiny, RJDBC
+# Packages nécessaires : shiny, RJDBC, data.table, ggplot2
 # Working directory : dossier de l'application, avec un dossier adjacent "db_data" contenant les BDD et h2.jar
 
 library(shiny)
@@ -75,14 +75,17 @@ ui <- fluidPage(
         "Pourcentage minimum",
         min = 0.5,
         max = 25,
-        value = 5,
+        value = 7,
         step = 0.5
       ),
       helpText("Seuls les blocs et objets dont l'utilisation est supérieure à la valeur choisie sont affichés."),
       textOutput("nbObs"),
       br(),
+      checkboxInput("useGameColors",
+                    label="Utiliser les couleurs du jeu pour les types d'objets/blocs",
+                    value=TRUE),
       checkboxInput("usePercent",
-                    label="Diagramme en pourcentages",
+                    label="Pourcentages",
                     value=TRUE)
     ),
     
@@ -167,6 +170,12 @@ server <- function(input, output, session) {
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
+    
+    if(input$useGameColors) {
+      coloration <- scale_fill_manual(values = vColors)
+    } else {
+      coloration <- scale_fill_discrete()
+    }
 
     # Graphique avec ggplot2
     ggplot(data, a) +
@@ -174,10 +183,11 @@ server <- function(input, output, session) {
       ggtitle(title) +
       xlab("\n\nType") +
       ylab(ylabel) +
-      scale_fill_manual(values = vColors, guide=F) + # guide=F supprime la légende
+      coloration + # guide=F supprime la légende
       theme(
         text = element_text(size=20),
-        axis.text.x = element_text(angle=45,vjust=0.5)) +
+        axis.text.x = element_text(angle=45,vjust=0.5)
+      ) +
       end
   })
   

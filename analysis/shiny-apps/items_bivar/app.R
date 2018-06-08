@@ -149,8 +149,8 @@ ui <- fluidPage(
         value = c(0,10),
         step = 1
       ),
-      checkboxInput("usePercent",
-                    label="Diagramme en pourcentages",
+      checkboxInput("useGameColors",
+                    label="Utiliser les couleurs du jeu pour les types d'objets/blocs",
                     value=FALSE)
     ),
     
@@ -252,27 +252,25 @@ server <- function(input, output, session) {
       title <- "Aucune donnée"
     }
     data <- filteredData()
-    print(data)
-    if(input$usePercent) {
-      a <- aes(x=PPT, y=COUNT/totalCount(), group=NAME, color=NAME)
-      end <- scale_y_continuous(label=scales::percent)
-      ylabel <- "% utilisation"
+    
+    if(input$useGameColors) {
+      coloration <- scale_color_manual(values = vColors)
     } else {
-      a <- aes(x=PPT, y=COUNT, group=NAME, color=NAME)
-      end <- NULL
-      ylabel <- "Nombre d'utilisations"
+      coloration <- scale_color_discrete()
     }
     
     # Graphique avec ggplot2
-    ggplot(data, a) +
+    ggplot(data, aes(x=PPT, y=COUNT, group=NAME, color=NAME)) +
       geom_line() +
       geom_point() +
       ggtitle(title) +
       xlab("Temps de jeu du joueur sur ce serveur (heures)") +
-      ylab(ylabel) +
-      #scale_fill_manual(values = vColors, guide=F) + # guide=F supprime la légende
-      theme(text = element_text(size=20)) +
-      end
+      ylab("Nombre d'utilisations") +
+      coloration +
+      theme(
+        text = element_text(size=20),
+        legend.key.width = unit(50, "pt")
+      ) # legend.position = "bottom"
   })
 }
 
