@@ -41,6 +41,8 @@ dataJulien <- list(dbGetQuery(connJulien, sqlBroken),
                    )
 
 dataColors <- dbGetQuery(connBofas, "SELECT Name, Color FROM ItemRegistry")
+vColors <- dataColors$COLOR # Vecteur contenant les couleurs
+names(vColors) <- dataColors$NAME # nomme le vecteurs de couleurs avec le nom des types
 
 # View(dataBofas[[1]])
 # View(dataBofas[[3]])
@@ -165,9 +167,6 @@ server <- function(input, output, session) {
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
-    # Vecteur contenant les couleurs
-    vColors <- dataColors$COLOR
-    names(vColors) <- dataColors$NAME # vecteur nommé, avec le nom des types
 
     # Graphique avec ggplot2
     ggplot(data, a) +

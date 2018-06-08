@@ -24,9 +24,11 @@ dbGetQuery(connJulien, "SHOW TABLES")
 
 # Découpage par demi-heure :
 # 20 ticks par seconde * 1 heure = 20*3600 = 72000 ticks
-sqlBroken <- "SELECT Name, (PlayerPlayTime/72000) AS PPT, count(*) AS Count FROM BrokenBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, (PlayerPlayTime/72000) ORDER BY (PlayerPlayTime/72000)"
-sqlPlaced <- "SELECT Name, (PlayerPlayTime/72000) AS PPT, count(*) AS Count FROM PlacedBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, (PlayerPlayTime/72000) ORDER BY (PlayerPlayTime/72000)"
-sqlCreated <- "SELECT Name, (PlayerPlayTime/72000) AS PPT, sum(Amount) AS Count FROM CreatedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name, (PlayerPlayTime/72000) ORDER BY (PlayerPlayTime/72000)"
+ppt <- "(PlayerPlayTime/72000)"
+sqlBroken <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM BrokenBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
+sqlBroken <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM BrokenBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
+sqlPlaced <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM PlacedBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
+sqlCreated <- sprintf("SELECT Name, %s AS PPT, sum(Amount) AS Count FROM CreatedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
 #sqlConsumed <- "SELECT Name, count(C.Id) AS Count FROM ConsumedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name ORDER BY count(C.Id) DESC"
 # on a trop peu de données pour les objets consommés
 
@@ -57,6 +59,8 @@ namesJulien <- list(dbGetQuery(connJulien, sqlBrokenNames),
 )
 
 dataColors <- dbGetQuery(connBofas, "SELECT Name, Color FROM ItemRegistry")
+vColors <- dataColors$COLOR # Vecteur contenant les couleurs
+names(vColors) <- dataColors$NAME # nomme le vecteurs de couleurs avec le nom des types
 
 # View(dataBofas[[1]])
 # View(dataBofas[[3]])
@@ -206,9 +210,6 @@ server <- function(input, output, session) {
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
-    # Vecteur contenant les couleurs
-    vColors <- dataColors$COLOR
-    names(vColors) <- dataColors$NAME # vecteur nommé, avec le nom des types
     
     # Graphique avec ggplot2
     ggplot(data, a) +
