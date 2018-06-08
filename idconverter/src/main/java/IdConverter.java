@@ -55,7 +55,7 @@ public class IdConverter {
 	  String lower = type.toLowerCase();
 	  if (lower.contains("wood")) {
 	    return "#bd9a64";
-    } else if(lower.contains("coal")) {
+    } else if(lower.contains("coal") || lower.contains("ink")) {
 	    return "#333333";
     } else if(lower.contains("nether")) {
 	    return "#800E0E";
@@ -69,6 +69,8 @@ public class IdConverter {
 	    return "#3E9C15";
     } else if(lower.contains("gold")) {
 	    return "#FFFF0B";
+    } else if(lower.contains("glass")) {
+	    return "#A8C9CE";
     }
 	  return colorsMap.getOrDefault(type, "#009FF0"); // #595959 = gris, #009FF0 = bleu ciel
   }
@@ -86,7 +88,8 @@ public class IdConverter {
     colorsMap.put("Bricks", "#ed2f00");
     colorsMap.put("Torch", "#FF8F00");
     colorsMap.put("Stick", "#473821");
-    colorsMap.put("Glass", "#A8C9CE");
     colorsMap.put("Steak", "#D42A2A");
+    colorsMap.put("Fence", "#bd9a64");
+    colorsMap.put("Sign", "#bd9a64");
   }
 }

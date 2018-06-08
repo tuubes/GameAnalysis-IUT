@@ -173,9 +173,12 @@ server <- function(input, output, session) {
     ggplot(data, a) +
       geom_bar(stat="identity") +
       ggtitle(title) +
-      xlab("Type") +
+      xlab("\n\nType") +
       ylab(ylabel) +
-      scale_fill_manual(values = vColors) +
+      scale_fill_manual(values = vColors, guide=F) + # guide=F supprime la légende
+      theme(
+        text = element_text(size=20),
+        axis.text.x = element_text(angle=45,vjust=0.5)) +
       end
   })
   
