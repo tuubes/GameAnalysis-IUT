@@ -2,7 +2,7 @@
 # Shiny Web App - Blocs et items, stats bivariées (type + temps de jeu)
 # (c) Guillaume Raffin 2018
 #
-# Packages nécessaires : shiny, RJDBC
+# Packages nécessaires : shiny, RJDBC, data.table, ggplot2, rlist
 # Working directory : dossier de l'application, avec un dossier adjacent "db_data" contenant les BDD et h2.jar
 
 library(shiny)
@@ -36,16 +36,48 @@ sqlBrokenNames <- "SELECT distinct(Name) FROM BrokenBlocks B, ItemRegistry I WHE
 sqlPlacedNames <- "SELECT distinct(Name) FROM PlacedBlocks B, ItemRegistry I WHERE B.Id = I.Id"
 sqlCreatedNames <- "SELECT distinct(Name) FROM CreatedItems C, ItemRegistry I WHERE C.Id = I.Id"
 
+padWithZeros <- function(dataTable, minPPT, maxPPT, names) {
+  # Remplit de zéros les plages sans données, pour que chaque NAME ait exactement une occurence par PPT
+  # Exemple d'utilisation: padWithZeros(dataBofas[[1]], 0, maxPPT, namesBofas[[1]]$NAME)
+  
+  # Etape 1: ajout des nouvelles lignes, avec COUNT=NA
+  # (((Ancienne version moins opti)))
+  # newRows <- list(dataTable)
+  # i <- 2
+  # for(n in names) {
+  #   for(t in minPPT:maxPPT) {
+  #     newRows[[i]] <- data.frame(NAME=n, PPT=t, COUNT=NA)
+  #     i <- i+1
+  #   }
+  # }
+  # newData <- rbindlist(newRows)
+  # Etape 2: transformation magique des NA en zéros
+  # dataTable[is.na(dataTable[["COUNT"]]), "COUNT" := 0]
+  # (((Nouvelle version opti avec les opérations de data.frame)))
+  
+  # Etape 1 : ajoute des lignes avec COUNT=0 pour chaque NAME et PPT
+  range <- maxPPT-minPPT+1
+  nbNames <- length(names)
+  l <- list(dataTable, data.table(NAME=rep(names,each=range), PPT=rep(minPPT:maxPPT, times=nbNames), COUNT=0))
+  newData <- rbindlist(l)
+
+  # Etape 2 : Fusionne les données en ajoutant le COUNT pour les mêmes valeurs de PPT et NAME
+  merged <- newData[, sum(COUNT), by=list(NAME, PPT)]
+  return(merged)
+}
+
 dataBofas <- list(dbGetQuery(connBofas, sqlBroken),
                   dbGetQuery(connBofas, sqlPlaced),
                   dbGetQuery(connBofas, sqlCreated)
                   #,dbGetQuery(connBofas, sqlConsumed)
 )
+
 namesBofas <- list(dbGetQuery(connBofas, sqlBrokenNames),
                   dbGetQuery(connBofas, sqlPlacedNames),
                   dbGetQuery(connBofas, sqlCreatedNames)
                   #,dbGetQuery(connBofas, sqlConsumed)
 )
+allNamesBofas <- unique(unlist(sapply(namesBofas, function(table) table$NAME)))
 
 dataJulien <- list(dbGetQuery(connJulien, sqlBroken),
                    dbGetQuery(connJulien, sqlPlaced),
@@ -57,6 +89,21 @@ namesJulien <- list(dbGetQuery(connJulien, sqlBrokenNames),
                    dbGetQuery(connJulien, sqlCreatedNames)
                    #,dbGetQuery(connJulien, sqlConsumed)
 )
+allNamesJulien <- unique(unlist(sapply(namesJulien, function(table) table$NAME)))
+allNamesCombined <- unique(c(allNamesBofas, allNamesJulien))
+
+maxPPTBofas <- max(sapply(dataBofas, function(table) max(table$PPT)))
+maxPPTJulien <- max(sapply(dataJulien, function(table) max(table$PPT)))
+maxPPTCombined <- max(maxPPTBofas, maxPPTJulien) # le plus grand PPT trouvé dans chaque table de dataBofas et dataJulien
+
+assertthat::are_equal(length(dataBofas), length(dataJulien))
+for(i in 1:length(dataBofas)) {
+  dataBofas[[i]] <- padWithZeros(dataBofas[[i]], 0, maxPPTCombined, allNamesCombined)
+  dataJulien[[i]] <- padWithZeros(dataJulien[[i]], 0, maxPPTCombined, allNamesCombined)
+}
+# ne fonctionne pas comme attendu:
+# dataBofas <- sapply(dataBofas, function(table) padWithZeros(table, 0, maxPPTCombined, allNamesCombined), simplify="array")
+# dataJulien <- sapply(dataJulien, function(table) padWithZeros(table, 0, maxPPTCombined, allNamesCombined))
 
 dataColors <- dbGetQuery(connBofas, "SELECT Name, Color FROM ItemRegistry")
 vColors <- dataColors$COLOR # Vecteur contenant les couleurs
@@ -161,12 +208,17 @@ server <- function(input, output, session) {
   filteredData <- reactive({
     # Ne garde que les types choisis par l'utilisateur
     aggregated <- dataInput()
-    print(input$timeRange)
-    print(input$typeChoice)
     filtered <- aggregated[NAME %in% input$typeChoice]
     
     if(nrow(filtered) > 0) {
-      maxTime <- max(filtered$PPT)
+      if(input$serverChoice == "BOFAS") {
+        maxTime <- maxPPTBofas # max(filtered$PPT)
+      } else if(input$serverChoice == "Julien") {
+        maxTime <- maxPPTJulien
+      } else {
+        maxTime <- maxPPTCombined
+      }
+      
       if(input$timeRange[2] == 0) {
         updateSliderInput(session, "timeRange", max=maxTime, value=c(0,maxTime))
       } else {
