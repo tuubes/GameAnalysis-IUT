@@ -40,8 +40,8 @@ padWithZeros <- function(dataTable, minPPT, maxPPT, names) {
   # Remplit de zéros les plages sans données, pour que chaque NAME ait exactement une occurence par PPT
   # Exemple d'utilisation: padWithZeros(dataBofas[[1]], 0, maxPPT, namesBofas[[1]]$NAME)
   
-  # Etape 1: ajout des nouvelles lignes, avec COUNT=NA
   # (((Ancienne version moins opti)))
+  # Etape 1: ajout des nouvelles lignes, avec COUNT=NA
   # newRows <- list(dataTable)
   # i <- 2
   # for(n in names) {
@@ -53,8 +53,8 @@ padWithZeros <- function(dataTable, minPPT, maxPPT, names) {
   # newData <- rbindlist(newRows)
   # Etape 2: transformation magique des NA en zéros
   # dataTable[is.na(dataTable[["COUNT"]]), "COUNT" := 0]
-  # (((Nouvelle version opti avec les opérations de data.frame)))
   
+  # (((Nouvelle version opti avec les opérations de data.frame)))
   # Etape 1 : ajoute des lignes avec COUNT=0 pour chaque NAME et PPT
   range <- maxPPT-minPPT+1
   nbNames <- length(names)
