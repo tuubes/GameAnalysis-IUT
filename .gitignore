@@ -6,3 +6,5 @@ out/
 .settings/
 .gradle/
 bin/
+.Rhistory
+.RData
