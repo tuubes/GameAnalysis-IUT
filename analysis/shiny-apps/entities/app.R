@@ -59,7 +59,7 @@ ui <- fluidPage(
         "minPercent",
         "Pourcentage minimum",
         min = 0.5,
-        max = 25,
+        max = 30,
         value = 7,
         step = 0.5
       ),
