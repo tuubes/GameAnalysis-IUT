@@ -12,6 +12,7 @@ library(RJDBC)
 library(data.table)
 library(rgl)
 library(plot3D)
+library(raster)
 
 mode <- "cubic" # cubes, spheres, points
 cubeSparseFactor <- 2
@@ -36,6 +37,15 @@ sqlAllMovesFreq <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N FROM PlayerM
 dataBofas <- data.table(dbGetQuery(connBofas, sqlAllMovesFreq))
 dataJulien <- data.table(dbGetQuery(connJulien, sqlAllMovesFreq))
 
+# X,Y,Z,N pour tout le serveur, avec le temps où le chunk est visité pour la première fois
+sqlAllMovesFreqTime <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N, min(Time) T FROM PlayerMoves GROUP BY X,Y,Z ORDER BY T ASC"
+dataBofasTime <- data.table(dbGetQuery(connBofas, sqlAllMovesFreqTime))
+dataJulienTime <- data.table(dbGetQuery(connJulien, sqlAllMovesFreqTime))
+
+sqlPlayers <- "SELECT distinct(PlayerId) PLAYER FROM PlayerMoves"
+playersBofas <- data.table(dbGetQuery(connBofas, sqlPlayers))
+playersJulien <- data.table(dbGetQuery(connJulien, sqlPlayers))
+
 dbDisconnect(connBofas)
 dbDisconnect(connJulien)
 
@@ -58,54 +68,52 @@ getColor <- function(n, sumN) {
     return("#de2d26")
   } else if(p > 0.002) {
     return("#ffeda0")
-  } else if(p > 0.0002) {
+  } else if(n > 2) {#0.0002) {
     return("#addd8e")
   } else {
     return("#3182bd")
   }
 }
 
+data<-dataBofasTime
+data<-dataJulienTime
+glZFactor=3
 # -- Visu RGL --
 datavizChunk3D <- function(mode, data, sleep=10000, close=F, glZFactor=1) {
   sumN <- sum(data$N)
 
   open3d()
   par3d(windowRect = c(200,200,1000,800))
-  rgl.viewpoint(theta = 0, phi = 0, zoom = 0.5)
+  view3d(theta = 0, phi = 0)
+  rgl.pop("lights") # remove the current light sources
+  light3d(theta=0, phi=0, viewpoint.rel=TRUE, ambient="white")
   bg3d("white")
   
   if (mode == "cubes") {
     print("Création des modèles de cubes pour les chunks utilisés")
+    cube0 <- cube3d(lit=FALSE)
+    cube0$vb[cube0$vb == -1] <- 0
     cubes<-apply(data, 1, function(row) {
       # ATTENTION : dans RGL, la hauteur est Z, alors que c'est Y dans Minecraft.
       x<-row[1] # minecraft:X
       y<-row[3] # minecraft:Z
       z<-row[2] # minecraft:Y
       n<-row[4]
-      cubit <- cube3d(col = getColor(n, sumN), lit=F)
-      cubit$vb[cubit$vb == -1] <- 0
-      cubit$vb[1,] <- cubit$vb[1,] + x
-      cubit$vb[2,] <- cubit$vb[2,] + y
-      cubit$vb[3,] <- cubit$vb[3,] + z*glZFactor
-      #
-      #mesh<-qmesh3d(cubit$vb, cubit$ib, material=cubit$material)
-      return(cubit)
+      #print(paste(x,y,z))
+      cube <- translate3d(cube0, x,y,z*glZFactor)
+      cube$material$col <- getColor(n, sumN)
+      return(cube)
     })
     print("Affichage des cubes")
-    colAlpha <- 0.8
     
     # Attention ! Zone de lenteur :c
     for(cubit in cubes) {
-      #wire3d(cubit, add = TRUE, color = cubit$material$col)
-      shade3d(cubit, add=T, alpha=colAlpha)
+      wire3d(cubit, add=TRUE, color = rgb(0,0,0))
+      shade3d(cubit, add=TRUE, alpha=1)
       #plot3d(cubit, type="shade", add=T)
     }
     # Fin de la zone c:
-  } else if(mode=="timelapse") {
-    
   } else {
-    data<-dataBofas
-    sumN<-sum(data$N)
     vColors <- lapply(data$N, function(n) getColor(n, sumN))
     if(mode =="points") {
       plot3d(x=data$X, y=data$Z, z=data$Y, col=vColors, type="p", size=5)
@@ -130,3 +138,37 @@ datavizChunk3D <- function(mode, data, sleep=10000, close=F, glZFactor=1) {
 datavizChunk3D("spheres", dataBofas, sleep=0)
 datavizChunk3D("points", dataBofas, sleep=0)
 datavizChunk3D("cubes", dataBofas, sleep=0, glZFactor=3)
+
+# -- Dataviz d'une tranche plate XZ avec image --
+minX <- min(data$X)
+maxX <- max(data$X)
+minY <- min(data$Z)
+maxY <- max(data$Z)
+getColor2D <- function(x, y) {
+  n <- data[data$X == x][data$Z == y]$N
+  print(n)
+  if(is.na(n)) {
+    return("#ffffff")
+  } else {
+    return(getColor(n, sumN))
+  }
+}
+x<-minX:maxX
+y<-minY:maxY
+z <- outer(x,y)
+
+# -- Dataviz avec plot3D : plus rapide ? --
+data<-dataBofas
+sumN<-sum(data$N)
+vColors <- lapply(data$N, function(n) getColor(n, sumN))
+voxel3D(x=data$X, y=data$Z, z=data$Y)
+
+x <- y <- z <- seq(-10, 10)
+xyz <- mesh(x, y, z)
+F <- with(xyz, log(x^2 + y^2 + z^2 +
+                     10*(x^2 + y^2) * (y^2 + z^2) ^2))
+voxel3D(x, y, z, F, level = 4, pch = ".", cex = 5)
+
+vox <- createvoxel(x, y, z, F, level = 4)
+scatter3D(vox$x, vox$y, vox$z, colvar = vox$y,
+          bty = "g", colkey = FALSE)
