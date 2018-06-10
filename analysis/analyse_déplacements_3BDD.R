@@ -2,11 +2,11 @@
 library(RJDBC)
 
 # --- Paramètres---
-dbPath1 <- "C:/Users/Alexandre/Desktop/Données BDD/database_bofas"
-dbmsPath1 <- "C:/Users/Alexandre/Desktop/h2-1.4.197.jar"
+dbPath1 <- "C:/Users/Alexandre/Desktop/db_data/database_bofas"
+dbmsPath1 <- "C:/Users/Alexandre/Desktop/db_data/h2-1.4.197.jar"
 
-dbPath2 <- "C:/Users/Alexandre/Desktop/Données BDD/database_julien"
-dbmsPath2 <- "C:/Users/Alexandre/Desktop/h2-1.4.197.jar"
+dbPath2 <- "C:/Users/Alexandre/Desktop/db_data/database_julien"
+dbmsPath2 <- "C:/Users/Alexandre/Desktop/db_data/h2-1.4.197.jar"
 
 
 
@@ -21,41 +21,42 @@ conn2 <- dbConnect(drv2, paste("jdbc:h2:", dbPath2, sep=""), "", "")
 
 
 # --- Analyses statistiques ---
-#------Analyses Data1----------
+#------Analyses dispersion Data1----------
 data1<-dbGetQuery(conn1, "SELECT * FROM PlayerMoves")
-View(data1)
 summary(data1)
-boxplot(data1[3:5], main="Distribution desdéplacements", ylab="Nombre de caractères")
-##(1/n)Somme de (x-xbar)^2+(y-ybar)^2+(z-zbar)^2
-##1/n*sum((x-mean(PLAYERID$CHUNKX))^2+(x-mean(PLAYERID$CHUNKY))^2+(x-mean(PLAYERID$CHUNKZ))^2)
+boxplot(data1[3:5], main="Distribution des déplacements", ylab="Numéro de tronçons")
 
 
 
-moyx<-mean(data1$CHUNKX)
-moyy<-mean(data1$CHUNKY)
-moyz<-mean(data1$CHUNKZ)
-somme<-0
-for (i in seq(1,length(data1$CHUNKX),by=1)){
-  somme<-somme+(data1[i,3]-moyx)^2+(data1[i,4]-moyy)^2+(data1[i,5]-moyz)^2
-}
-res<-1/length(data1$CHUNKX)*somme
 
 
 
-#------Analyses Data2---------
+#------Analyses dispersion Data2---------
 data2<-dbGetQuery(conn2, "SELECT * FROM PlayerMoves")
-View(data2)
 summary(data2)
-boxplot(data2[3:5], main="Distribution des déplacements", ylab="Nombre de caractères")
+boxplot(data2[3:5], main="Distribution des déplacements", ylab="Numéro de tronçons")
 
-moyx2<-mean(data2$CHUNKX)
-moyy2<-mean(data2$CHUNKY)
-moyz2<-mean(data2$CHUNKZ)
-somme2<-0
-for (i in seq(1,length(data1$CHUNKX),by=1)){
-  somme2<-somme2+(data2[i,3]-moyx)^2+(data2[i,4]-moyy)^2+(data2[i,5]-moyz)^2
-}
-res2<-1/length(data2$CHUNKX)*somme2
+
+
+# --- Calcul corrélations-----
+
+x1<-data1$CHUNKX
+y1<-data1$CHUNKY
+z1<-data1$CHUNKZ
+
+x2<-data2$CHUNKX
+y2<-data2$CHUNKY
+z2<-data2$CHUNKZ
+
+corxy1<-cor(x1, y1 , method = "pearson");corxy1
+corxz1<-cor(x1, z1 , method = "pearson");corxz1
+corzy1<-cor(z1, y1 , method = "pearson");corzy1
+
+corxy2<-cor(x2, y2 , method = "pearson");corxy2
+corxz2<-cor(x2, z2 , method = "pearson");corxz2
+corzy2<-cor(z2, y2 , method = "pearson");corzy2
+
+
 
 # --- Déconnexion de la BDD ---
 print("disconnecting")
