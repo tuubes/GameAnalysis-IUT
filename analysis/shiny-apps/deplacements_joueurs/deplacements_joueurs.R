@@ -91,7 +91,7 @@ datavizChunk3D <- function(mode, data, sleep=10000, close=F, glZFactor=1) {
   
   if (mode == "cubes") {
     print("Création des modèles de cubes pour les chunks utilisés")
-    cube0 <- cube3d(lit=FALSE)
+    cube0 <- cube3d(lit=slow, smooth=TRUE, fog=FALSE)
     cube0$vb[cube0$vb == -1] <- 0
     cubes<-apply(data, 1, function(row) {
       # ATTENTION : dans RGL, la hauteur est Z, alors que c'est Y dans Minecraft.
@@ -135,40 +135,8 @@ datavizChunk3D <- function(mode, data, sleep=10000, close=F, glZFactor=1) {
   }
 }
 
-datavizChunk3D("spheres", dataBofas, sleep=0)
-datavizChunk3D("points", dataBofas, sleep=0)
-datavizChunk3D("cubes", dataBofas, sleep=0, glZFactor=3)
+datavizChunk3D("spheres", data, sleep=0)
+datavizChunk3D("points", data, sleep=0)
+datavizChunk3D("cubes", data, sleep=0, glZFactor=1)
+system.time(datavizChunk3D("cubes", data, sleep=0, glZFactor=1))
 
-# -- Dataviz d'une tranche plate XZ avec image --
-minX <- min(data$X)
-maxX <- max(data$X)
-minY <- min(data$Z)
-maxY <- max(data$Z)
-getColor2D <- function(x, y) {
-  n <- data[data$X == x][data$Z == y]$N
-  print(n)
-  if(is.na(n)) {
-    return("#ffffff")
-  } else {
-    return(getColor(n, sumN))
-  }
-}
-x<-minX:maxX
-y<-minY:maxY
-z <- outer(x,y)
-
-# -- Dataviz avec plot3D : plus rapide ? --
-data<-dataBofas
-sumN<-sum(data$N)
-vColors <- lapply(data$N, function(n) getColor(n, sumN))
-voxel3D(x=data$X, y=data$Z, z=data$Y)
-
-x <- y <- z <- seq(-10, 10)
-xyz <- mesh(x, y, z)
-F <- with(xyz, log(x^2 + y^2 + z^2 +
-                     10*(x^2 + y^2) * (y^2 + z^2) ^2))
-voxel3D(x, y, z, F, level = 4, pch = ".", cex = 5)
-
-vox <- createvoxel(x, y, z, F, level = 4)
-scatter3D(vox$x, vox$y, vox$z, colvar = vox$y,
-          bty = "g", colkey = FALSE)
