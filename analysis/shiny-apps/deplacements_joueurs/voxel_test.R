@@ -54,6 +54,15 @@ getColor <- function(n, nMin, nMax) {
   }
 }
 
+getColor <- function(n, nMin, nMax) {
+  f<-scales::gradient_n_pal(c("#3182bd", "#addd8e", "#de2d26"))
+  if(n ==0) {
+    "#ffffff"
+  } else {
+    f(n/nMax)
+  }
+}
+
 # -- TEST Rgl3D --
 rgl3D(dataJulienTime, xi=1, zi=2, yi=3, colorFunction = getColor)#, notifyProgressFunction = function(x,y,z) print(paste(x,y,z)))
 system.time({
@@ -88,17 +97,47 @@ image2D(dataJulien[Y == 4], xi=1, yi=3, ni=4, colorFunction = getColor, ylab="Z"
 title("Couche ChunkY = 4, intensité absolue")
 
 # -- TEST ggplot2 --
+#######################
+# Couleurs relatives :
 ggplot(dataJulien[Y == 4], aes(X, Z, fill=log10(N))) +
   geom_raster()
 
 ggplot(dataJulien[Y == 4], aes(X, Z, fill=log10(N))) +
   geom_raster() +
-  scale_fill_gradientn(colors=c("#3182bd", "#addd8e", "#de2d26"))
+  scale_fill_gradientn(colors=c("#3182bd", "#addd8e", "#fe2d26"))
+
+ggplot(dataJulien[Y == 4], aes(X, Z, fill=N)) +
+  geom_raster() +
+  scale_fill_gradientn(colors=c("#3182bd", "#addd8e", "#fe2d26"))
+
+#######################
+# Couleurs absolues grâce à une palette remaniée en fonction des valeurs de la couche Y=k
+f<-scales::gradient_n_pal(c("#3182bd", "#addd8e", "#fe2d26")) #de2d26
+f(0)
+f(0.5)
+f(1)
+# La fonction gradient_n_pal retourne une fonction x->couleur pour x € [0;1]
+
+data<-dataJulien[Y == 4]
+colorMin<-f(1-(min(data$N)/min(dataJulien$N)))
+colorMid<-f(0.5*(max(data$N)-min(data$N))/(max(dataJulien$N)-min(dataJulien$N)))
+colorMax<-f(max(data$N)/max(dataJulien$N))
+
+ggplot(dataJulien[Y == 4], aes(X, Z, fill=N)) +
+  geom_raster() +
+  scale_fill_gradientn(colors=c(colorMin, colorMid, colorMax))
+## ^^ Cela donne EXACTEMENT le même résultat qu'avec la fonction image2D et la deuxième getColor ^^
+
+data<-dataJulien[Y == 4]
+colorMin<-f(1-(min(1+log10(data$N))/min(1+log10(dataJulien$N))))
+#colorMid<-f(0.5*(max(1+log10(data$N))-min(1+log10(data$N)))/((max(1+log10(dataJulien$N))-min(1+log10(dataJulien$N))))
+colorMid<-f(0.5*(max(1+log10(data$N))/max(1+log10(dataJulien$N))))
+colorMax<-f(max(1+log10(data$N))/max(1+log10(dataJulien$N)))
 
 ggplot(dataJulien[Y == 4], aes(X, Z, fill=log10(N))) +
   geom_raster() +
-  scale_fill_gradientn(colors=c("#3182bd", "#addd8e", "#de2d26"), guide="legend")
-
-f<-scales::gradient_n_pal(c("#3182bd", "#addd8e", "#de2d26"))
-f(0.5)
-# La fonction gradient_n_pal retourne une fonction x->couleur pour x € [0;1]
+  ggplot2::xlab("Tronçon X") +
+  ggplot2::ylab("Tronçon Z") +
+  ggtitle("Couche Y=4") + 
+  scale_fill_gradientn(colors=c(colorMin, colorMid, colorMax))
+## ^^ Ressemble à la première fonction getColor ^^
