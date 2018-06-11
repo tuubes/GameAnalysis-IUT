@@ -61,7 +61,8 @@ rgl3D <- function(data, xi=1, yi=2, zi=3, ni=4,
 }
 
 scatterPlot3D <- function(data, xi=1, yi=2, zi=3, ni=4, colorFunction,
-                                 xlab="X", ylab="Y", zlab="Z", title="XYZ") {
+                          viewTheta=0, viewPhi=0,
+                          xlab="X", ylab="Y", zlab="Z", title="XYZ") {
   #plot_ly(data, x = data[,..xi], y = data[,..yi], z = data[,..zi],
   #plot_ly(data, x=~X, y=~Z, z=~Y,
   #        marker = list(color = data[,..ni], colorscale = c('#3182bd', '#de2d26'),
@@ -83,9 +84,11 @@ scatterPlot3D <- function(data, xi=1, yi=2, zi=3, ni=4, colorFunction,
   dataX<-apply(data[,..xi], 1, as.numeric)
   dataY<-apply(data[,..yi], 1, as.numeric)
   dataZ<-apply(data[,..zi], 1, as.numeric)
-  rgl::plot3d(x=dataX, y=dataY, z=dataZ, col=vColors, type="s", radius=0.5,
+  open3d()
+  view3d(theta=viewTheta, phi=viewPhi)
+  plot3d(x=dataX, y=dataY, z=dataZ, col=vColors, type="s", radius=0.5,
          xlab=xlab, ylab=ylab, zlab=zlab)
-  graphics::title(title)
+  title3d(title)
 }
 
 image2D <- function(data, xi=1, yi=2, ni=4, colorFunction, defaultN=0, xlab="X", ylab="Y",title="XY",
