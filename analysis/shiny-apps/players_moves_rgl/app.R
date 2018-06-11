@@ -3,7 +3,7 @@
 # (c) Guillaume Raffin 2018
 #
 # Packages nécessaires : shiny, shinyjs, RJDBC, data.table, rgl
-# Working directory : dossier de l'application, avec un dossier adjacent "db_data" contenant les BDD et h2.jar
+# Working directory : dossier de l'application, avec le fichier voxel_analysis.R et avec un dossier adjacent "db_data" contenant les BDD et h2.jar
 # ATTENTION : il faut un serveur d'affichage fonctionnel avec les libs de développement 3D pour que l'application fonctionne sur le serveur Shiny
 
 library(shiny)

@@ -1,5 +1,5 @@
 #
-# Shiny Web App - Déplacements des joueurs, visualisation 2D
+# Shiny Web App - Apparition des entités, visualisation 2D
 # (c) Guillaume Raffin 2018
 #
 # Packages nécessaires : shiny, RJDBC, data.table, ggplot2
@@ -22,11 +22,8 @@ drv <- JDBC(driverClass = "org.h2.Driver", classPath = driverH2, identifier.quot
 connBofas <- dbConnect(drv, paste("jdbc:h2:", dbBofas, sep=""), "", "")
 connJulien <- dbConnect(drv, paste("jdbc:h2:", dbJulien, sep=""), "", "")
 
-dbGetQuery(connBofas, "SHOW TABLES")
-dbGetQuery(connJulien, "SHOW TABLES")
-
 # X,Y,Z pour tout le serveur, chaque XYZ apparait une seule fois, avec son nombre d'occurences N:
-sqlAllMovesFreq <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N FROM PlayerMoves GROUP BY X,Y,Z ORDER BY N DESC"
+sqlAllMovesFreq <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N FROM EntitySpawns GROUP BY X,Y,Z ORDER BY N DESC"
 dataBofas <- data.table(dbGetQuery(connBofas, sqlAllMovesFreq))
 dataJulien <- data.table(dbGetQuery(connJulien, sqlAllMovesFreq))
 
@@ -35,7 +32,7 @@ dbDisconnect(connJulien)
 
 # -- Interface Shiny --
 ui <- fluidPage(
-  titlePanel("Déplacements des joueurs : Visualisation 2D"),
+  titlePanel("Apparition des entitiés : Visualisation 2D"),
   
   sidebarLayout(
     sidebarPanel(
@@ -82,12 +79,12 @@ server <- function(input, output) {
     } else {
       aes<-aes(X, Z, fill=N)
     }
-
+    
     if(nrow(data) == 0) {
       ggplot(data, aes) + geom_raster() +
         ggplot2::xlab("Tronçon X") +
         ggplot2::ylab("Tronçon Z") +
-        ggtitle(paste(title, "(aucun déplacement dans cette zone)"))
+        ggtitle(paste(title, "(aucune apparition dans cette zone)"))
     } else {
       if(input$relativeScale) {
         cMin<-colorMin

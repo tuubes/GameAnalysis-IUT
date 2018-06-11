@@ -1,5 +1,5 @@
 #
-# Shiny Web App - Déplacements des joueurs, visualisation 2D
+# Shiny Web App - Déplacements des joueurs, visualisation 2D individuelle
 # (c) Guillaume Raffin 2018
 #
 # Packages nécessaires : shiny, RJDBC, data.table, ggplot2
@@ -25,17 +25,23 @@ connJulien <- dbConnect(drv, paste("jdbc:h2:", dbJulien, sep=""), "", "")
 dbGetQuery(connBofas, "SHOW TABLES")
 dbGetQuery(connJulien, "SHOW TABLES")
 
-# X,Y,Z pour tout le serveur, chaque XYZ apparait une seule fois, avec son nombre d'occurences N:
-sqlAllMovesFreq <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N FROM PlayerMoves GROUP BY X,Y,Z ORDER BY N DESC"
-dataBofas <- data.table(dbGetQuery(connBofas, sqlAllMovesFreq))
-dataJulien <- data.table(dbGetQuery(connJulien, sqlAllMovesFreq))
+# X,Y,Z, P pour tout le serveur, chaque XYZP apparait une seule fois, avec son nombre d'occurences N:
+sqlAllMovesFreqPerPlayer <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N, PlayerId P FROM PlayerMoves GROUP BY X,Y,Z,P ORDER BY N DESC"
+dataBofas <- data.table(dbGetQuery(connBofas, sqlAllMovesFreqPerPlayer))
+dataJulien <- data.table(dbGetQuery(connJulien, sqlAllMovesFreqPerPlayer))
+
+sqlAllPlayers <- "SELECT distinct(PlayerId) P FROM PlayerMoves"
+playersBofasTable <- data.table(dbGetQuery(connBofas, sqlAllPlayers))
+playersJulienTable <- data.table(dbGetQuery(connJulien, sqlAllPlayers))
+playersBofas <- sapply(playersBofasTable, function(row) substring(as.character(row),1,13))
+playersJulien <- sapply(playersJulienTable, function(row) substring(as.character(row),1,13))
 
 dbDisconnect(connBofas)
 dbDisconnect(connJulien)
 
 # -- Interface Shiny --
 ui <- fluidPage(
-  titlePanel("Déplacements des joueurs : Visualisation 2D"),
+  titlePanel("Déplacements des joueurs : Visualisation 2D individuelle"),
   
   sidebarLayout(
     sidebarPanel(
@@ -44,6 +50,10 @@ ui <- fluidPage(
                   choices = list("BOFAS", "Julien"),
                   selected = "Julien"),
       br(),
+      selectInput("playerChoice",
+                  label="Choisissez le joueur",
+                  choices=playersJulien,
+                  selected=playersJulien),
       sliderInput("y",
                   "Couche Y à afficher",
                   min=0,
@@ -67,13 +77,18 @@ ui <- fluidPage(
 )
 
 # -- Serveur Shiny --
-server <- function(input, output) {
-  output$rasterPlot <- renderPlot({
+server <- function(session, input, output) {
+  serverData <- reactive({
     if(input$serverChoice == "Julien") {
-      fullData <- dataJulien
+      updateSelectInput(session, "playerChoice", choices=playersBofas, selected=playersBofas[1])
+      dataBofas
     } else {
-      fullData <- dataBofas
+      updateSelectInput(session, "playerChoice", choices=playersJulien, selected=playersJulien[1])
+      dataJulien
     }
+  })
+  output$rasterPlot <- renderPlot({
+    fullData <- serverData()[substring(as.character(P),1,13) == input$playerChoice]
     data <- fullData[Y == input$y]
     title <- sprintf("Utilisation des tronçons X,Z pour Y=%i", input$y)
     
@@ -82,7 +97,7 @@ server <- function(input, output) {
     } else {
       aes<-aes(X, Z, fill=N)
     }
-
+    
     if(nrow(data) == 0) {
       ggplot(data, aes) + geom_raster() +
         ggplot2::xlab("Tronçon X") +
