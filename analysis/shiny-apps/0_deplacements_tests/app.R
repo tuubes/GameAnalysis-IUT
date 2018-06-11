@@ -41,40 +41,6 @@ colorsBofas <- paletteGenerator(maxBofas)
 colorsJulien <- paletteGenerator(maxJulien)
 
 # -- Test RGL --
-open3d()
-par3d(windowRect = c(200,200,1000,800))
-rgl.viewpoint(theta = 0, phi = 0, zoom = 0.5)
-bg3d("white")
-cubes<-apply(dataBofas, 1, function(row) {
-  # ATTENTION : dans RGL, la hauteur est Z, alors que c'est Y dans Minecraft.
-  x<-row[1] # minecraft:X
-  y<-row[3] # minecraft:Z
-  z<-row[2] # minecraft:Y
-  n<-row[4]
-  cubit <- cube3d(col = colorsBofas[n], size=16, lit=F)
-  cubit$vb[cubit$vb == -1] <- 0
-  cubit$vb[1,] <- cubit$vb[1,] + x
-  cubit$vb[2,] <- cubit$vb[2,] + y
-  cubit$vb[3,] <- cubit$vb[3,] + z
-  cubit$vb[4,] <- cubit$vb[4,]
-  return(cubit)
-})
-colAlpha <- 0.8
-for(cubit in cubes) {
-  #shade3d(cubit, add = TRUE, alpha = 0.5)
-  #wire3d(cubit, add = TRUE, color = cubit$material$col)
-  shade3d(cubit, add=T, alpha=colAlpha)
-  wire3d(cubit, add=T, alpha=colAlpha)
-}
-cubes[1:200]$col = rgb("black")
-title3d("Déplacements des joueurs", xlab="X", ylab="Y (mc: Z)", zlab="Z (mc: Y)")
-axes3d("x")
-axes3d("y")
-axes3d("z")
-rgl.viewpoint(theta = 0, phi = 0, zoom = 1)
-rgl.close()
-
-
 # Define UI for application that draws a histogram
 ui <- fluidPage(
    
