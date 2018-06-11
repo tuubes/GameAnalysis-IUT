@@ -37,8 +37,8 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("serverChoice",
                   label="Choisissez le serveur de jeu",
-                  choices = list("BOFAS", "Julien", "Données combinées"),
-                  selected = "BOFAS"),
+                  choices = list("BOFAS", "Julien", "Données combinées", "Données comparées"),
+                  selected = "Données comparées"),
       textOutput("nbObs"),
       br(),
       sliderInput(
@@ -52,7 +52,7 @@ ui <- fluidPage(
   
     mainPanel(
       plotOutput("boxplot", height=500),
-      textOutput("comment"),
+      htmlOutput("comment"),
       br(),
       em("* Le serveur stocke les messages en UTF-16, avec exactement 2 octets par caractère."))
   )
@@ -77,15 +77,35 @@ server <- function(input, output, session) {
   output$boxplot <- renderPlot({
     #data <- data[data$SIZE <= input$sup, ]
     title <- sprintf("Distribution de la taille des messages")
-    boxplot(dataInput(), main=title, ylab="Nombre de caractères")
-    abline(h = input$sup, col="red")
+    if(input$serverChoice == "Données comparées") {
+      boxplot(c(dataBofas, dataJulien), names=c("BOFAS", "Julien"), main=title, ylab="Nombre de caractères", cex=2)
+      abline(h = input$sup, col="red")
+    } else {
+      boxplot(dataInput(), main=title, ylab="Nombre de caractères", cex=2)
+      abline(h = input$sup, col="red")
+    }
   })
-  output$comment <- renderText({
+  output$comment <- renderUI({
     sup <- input$sup
-    data <- dataInput()
-    count <- sum(data$SIZE <= sup)/nrow(data)*100
-    sprintf("%.2f %% des messages font moins de %i caractères, et donc moins de %i octets*",
-            count, sup, sup*2)
+    if(input$serverChoice == "Données comparées") {
+      countBofas <- sum(dataBofas$SIZE <= sup)/nrow(dataBofas)*100
+      countJulien <- sum(dataJulien$SIZE <= sup)/nrow(dataJulien)*100
+      count <- sum(dataAll$SIZE <= sup)/nrow(dataAll)*100
+      HTML(paste(
+        sprintf("BOFAS : %.2f %% des messages font moins de %i caractères, et donc moins de %i octets*",
+              countBofas, sup, sup*2),
+        sprintf("Julien : %.2f %% des messages font moins de %i caractères, et donc moins de %i octets*",
+              countJulien, sup, sup*2),
+        sprintf("Données combinées : %.2f %% des messages font moins de %i caractères, et donc moins de %i octets*",
+              count, sup, sup*2),
+        sep="<br>")
+      )
+    } else {
+      data <- dataInput()
+      count <- sum(data$SIZE <= sup)/nrow(data)*100
+      HTML(sprintf("%.2f %% des messages font moins de %i caractères, et donc moins de %i octets*",
+              count, sup, sup*2))
+    }
   })
   output$nbObs <- renderText({
     nbObs <- nrow(dataInput())

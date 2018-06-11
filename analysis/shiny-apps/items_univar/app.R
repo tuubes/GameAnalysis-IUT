@@ -185,7 +185,7 @@ server <- function(input, output, session) {
       ylab(ylabel) +
       coloration + # guide=F supprime la légende
       theme(
-        text = element_text(size=20),
+        text = element_text(size=18),
         axis.text.x = element_text(angle=45,vjust=0.5)
       ) +
       end

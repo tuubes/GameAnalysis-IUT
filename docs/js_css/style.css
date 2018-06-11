@@ -197,3 +197,14 @@ div:hover > * > img.reactive-white {
   /* Transition du filter pour un changement progressif */
   transition: 1s filter ease, 1s -webkit-filter ease;
 }
+
+.tab-pane iframe {
+  width: 100%;
+  height: 800px;
+  border: none;
+  margin-top: 20px;
+}
+
+.big-spin {
+  font-size: 10em;
+}

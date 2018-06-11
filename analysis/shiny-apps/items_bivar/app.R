@@ -268,7 +268,7 @@ server <- function(input, output, session) {
       ylab("Nombre d'utilisations") +
       coloration +
       theme(
-        text = element_text(size=20),
+        text = element_text(size=18),
         legend.key.width = unit(50, "pt")
       ) # legend.position = "bottom"
   })

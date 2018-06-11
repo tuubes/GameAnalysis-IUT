@@ -35,6 +35,67 @@
 	</header>
 
 	<section class="container">
+		<h2>Résultats</h2>
+		<ul class="nav nav-pills" id="pills-tabs" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="pills-msg-tab" data-toggle="pill" href="#pills-msg" role="tab">Taille des messages</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-ent-tab" data-toggle="pill" href="#pills-entities" role="tab">Type des entités</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-iunivar-tab" data-toggle="pill" href="#pills-items-univar" role="tab">Blocs et objets</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-ibivar-tab" data-toggle="pill" href="#pills-items-bivar" role="tab">Blocs en fonction du temps de jeu</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-flatmoves-tab" data-toggle="pill" href="#pills-flat-moves" role="tab">Déplacement des joueurs (sections 2D, par serveur)</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-flatmoves-indiv-tab" data-toggle="pill" href="#pills-flat-moves-indiv" role="tab">Déplacement des joueurs (sections 2D, par joueur)</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-3dmoves" data-toggle="pill" href="#pills-3d-moves" role="tab">Déplacement des joueurs (3D)</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="pills-spawn-tab" data-toggle="pill" href="#pills-spawn" role="tab">Lieu d'apparition des entitiés</a>
+			</li>
+		</ul>
+		<div class="tab-content" id="pills-tabs-content">
+			<div class="tab-pane fade show active" id="pills-msg" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-msg"></i>
+				<iframe src="http://46.105.44.65:3838/tuubes-projet-tut/messages/" onload="hide('#spin-msg')"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-entities" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-ent"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/entities/" lazy-onload="hide('#spin-ent');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-items-univar" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-uni"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/items_univar/" lazy-onload="hide('#spin-uni');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-items-bivar" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-ibi"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/items_bivar/" lazy-onload="hide('#spin-ibi');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-flat-moves" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-fm"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/player_moves_flat/" lazy-onload="hide('#spin-fm');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-flat-moves-indiv" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-fmi"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/player_moves_individual/" lazy-onload="hide('#spin-fmi');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-3d-moves" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-3d"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/players_moves_rgl/" lazy-onload="hide('#spin-3d');"></iframe>
+			</div>
+			<div class="tab-pane fade" id="pills-spawn" role="tabpanel">
+				<i class="fa fa-spinner fa-spin big-spin" id="spin-spawn"></i>
+				<iframe class="lazy" lazy-src="http://46.105.44.65:3838/tuubes-projet-tut/entity_spawn_flat/" lazy-onload="hide('#spin-spawn');"></iframe>
+			</div>
+		</div>
 	</section>
 
 	<footer>
@@ -49,5 +110,6 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+	<script src="js_css/lazy_tabs.js"></script>
 </body>
 </html>

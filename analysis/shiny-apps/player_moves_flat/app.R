@@ -87,7 +87,11 @@ server <- function(input, output) {
       ggplot(data, aes) + geom_raster() +
         ggplot2::xlab("Tronçon X") +
         ggplot2::ylab("Tronçon Z") +
-        ggtitle(paste(title, "(aucun déplacement dans cette zone)"))
+        ggtitle(paste(title, "(aucun déplacement dans cette zone)")) +
+        theme(
+          text = element_text(size=18),
+          axis.text.x = element_text(angle=45,vjust=0.5)
+        )
     } else {
       if(input$relativeScale) {
         cMin<-colorMin
@@ -120,6 +124,10 @@ server <- function(input, output) {
         ggplot2::xlab("Tronçon X") +
         ggplot2::ylab("Tronçon Z") +
         ggtitle(title) +
+        theme(
+          text = element_text(size=18),
+          axis.text.x = element_text(angle=45,vjust=0.5)
+        ) +
         coord
     }
   })
