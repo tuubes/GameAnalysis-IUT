@@ -7,11 +7,9 @@
 # ATTENTION : il faut un serveur d'affichage fonctionnel avec les libs de développement 3D pour que l'application fonctionne sur le serveur Shiny
 
 library(shiny)
-library(shinyjs)
 library(RJDBC)
 library(data.table)
 library(rgl)
-library(ggplot2)
 
 source("../voxel_analysis.R")
 
@@ -53,8 +51,6 @@ g_legend <- function(a.gplot) {
 
 # -- Interface Shiny --
 ui <- fluidPage(
-  # ShinyJS permet d'améliorer l'expérience Shiny, notamment en activant et désactivant les éléments
-  useShinyjs(),
   titlePanel("Déplacements des joueurs : Visualisation 3D"),
   
   sidebarLayout(
