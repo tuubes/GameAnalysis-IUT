@@ -9,6 +9,7 @@ library(shiny)
 library(RJDBC)
 library(data.table)
 library(ggplot2)
+library(plotly)
 
 # -- Récupération des données depuis la BDD H2 ---
 driverH2 <- sprintf("%s/../db_data/h2.jar", getwd())
@@ -73,7 +74,7 @@ ui <- fluidPage(
       sliderInput(
         "minPercent",
         "Pourcentage minimum",
-        min = 0.5,
+        min = 0,
         max = 25,
         value = 7,
         step = 0.5
@@ -89,7 +90,7 @@ ui <- fluidPage(
                     value=TRUE)
     ),
     
-    mainPanel(plotOutput("chart", height=600))
+    mainPanel(plotlyOutput("chart", height=600))
   )
 )
 
@@ -147,7 +148,7 @@ server <- function(input, output, session) {
     totalCount <- sum(aggregated$COUNT)
   })
   
-  output$chart <- renderPlot({
+  output$chart <- renderPlotly({
     #data <- data[data$SIZE <= input$sup, ]
     hasBlocks <- "broken" %in% input$dataChoice || "placed" %in% input$dataChoice
     hasItems <- "created" %in% input$dataChoice # || "consumed" %in% input$dataChoice
@@ -162,11 +163,12 @@ server <- function(input, output, session) {
     }
     data <- filteredData()
     if(input$usePercent) {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount(), fill=NAME)
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount(), fill=NAME,
+               text=paste(NAME, ":", format(round(COUNT*100/totalCount(), 2), nsmall=2), "%"))
       end <- scale_y_continuous(label=scales::percent)
       ylabel <- "% utilisation"
     } else {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT, fill=NAME)
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT, fill=NAME, text=paste(NAME, ":", COUNT))
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
@@ -178,6 +180,7 @@ server <- function(input, output, session) {
     }
 
     # Graphique avec ggplot2
+    ggplotly(tooltip=c("text"),
     ggplot(data, a) +
       geom_bar(stat="identity") +
       ggtitle(title) +
@@ -189,6 +192,7 @@ server <- function(input, output, session) {
         axis.text.x = element_text(angle=45,vjust=0.5)
       ) +
       end
+    )
   })
   
   output$nbObs <- renderText({
