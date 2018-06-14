@@ -114,10 +114,12 @@ server <- function(input, output, session) {
     data <- filteredData()
     if(input$usePercent) {
       a <- aes(x=reorder(TYPE, -COUNT), y=COUNT/totalCount(), fill=TYPE)
+      above <- aes(y=0.025+(COUNT/totalCount()), label = paste(format(round(COUNT*100/totalCount(), 2), nsmall=2), "%"))
       end <- scale_y_continuous(label=scales::percent)
       ylabel <- "% apparition"
     } else {
       a <- aes(x=reorder(TYPE, -COUNT), y=COUNT, fill=TYPE)
+      above <- aes(y=25+COUNT, label = COUNT)
       end <- NULL
       ylabel <- "Nombre d'apparitions"
     }
@@ -125,12 +127,13 @@ server <- function(input, output, session) {
     # Graphique avec ggplot2
     ggplot(data, a) +
       geom_bar(stat="identity") +
+      geom_text(mapping=above) +
       ggtitle("Diagramme de Pareto des types d'entité\nnon-joueurs qui apparaissent en jeu") +
       xlab("\n\nType") +
       ylab(ylabel) +
       scale_fill_discrete() + # guide=F supprime la légende
       theme(
-        text = element_text(size=20),
+        text = element_text(size=18),
         axis.text.x = element_text(angle=45,vjust=0.5),
         plot.title = element_text(hjust=0.5)
       ) +

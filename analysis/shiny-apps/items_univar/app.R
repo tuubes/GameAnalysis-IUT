@@ -9,7 +9,6 @@ library(shiny)
 library(RJDBC)
 library(data.table)
 library(ggplot2)
-library(plotly)
 
 # -- Récupération des données depuis la BDD H2 ---
 driverH2 <- sprintf("%s/../db_data/h2.jar", getwd())
@@ -90,7 +89,7 @@ ui <- fluidPage(
                     value=TRUE)
     ),
     
-    mainPanel(plotlyOutput("chart", height=600))
+    mainPanel(plotOutput("chart", height=600))
   )
 )
 
@@ -148,7 +147,7 @@ server <- function(input, output, session) {
     totalCount <- sum(aggregated$COUNT)
   })
   
-  output$chart <- renderPlotly({
+  output$chart <- renderPlot({
     #data <- data[data$SIZE <= input$sup, ]
     hasBlocks <- "broken" %in% input$dataChoice || "placed" %in% input$dataChoice
     hasItems <- "created" %in% input$dataChoice # || "consumed" %in% input$dataChoice
@@ -163,12 +162,13 @@ server <- function(input, output, session) {
     }
     data <- filteredData()
     if(input$usePercent) {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount(), fill=NAME,
-               text=paste(NAME, ":", format(round(COUNT*100/totalCount(), 2), nsmall=2), "%"))
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT/totalCount(), fill=NAME)
+      above <- aes(label = paste(format(round(COUNT*100/totalCount(), 2), nsmall=2), "%"))
       end <- scale_y_continuous(label=scales::percent)
       ylabel <- "% utilisation"
     } else {
-      a <- aes(x=reorder(NAME, -COUNT), y=COUNT, fill=NAME, text=paste(NAME, ":", COUNT))
+      a <- aes(x=reorder(NAME, -COUNT), y=COUNT, fill=NAME)
+      above <- aes(label = COUNT)
       end <- NULL
       ylabel <- "Nombre d'utilisations"
     }
@@ -180,9 +180,10 @@ server <- function(input, output, session) {
     }
 
     # Graphique avec ggplot2
-    ggplotly(tooltip=c("text"),
+    if(nrow(data) > 0) {
     ggplot(data, a) +
-      geom_bar(stat="identity") +
+      geom_bar(stat="identity", position="dodge") +
+      geom_text(mapping=above, position=position_dodge(width=0.9), vjust=-0.25) +
       ggtitle(title) +
       xlab("\n\nType") +
       ylab(ylabel) +
@@ -192,7 +193,9 @@ server <- function(input, output, session) {
         axis.text.x = element_text(angle=45,vjust=0.5)
       ) +
       end
-    )
+    } else {
+      ggplot(data, a) + ggtitle(title)
+    }
   })
   
   output$nbObs <- renderText({

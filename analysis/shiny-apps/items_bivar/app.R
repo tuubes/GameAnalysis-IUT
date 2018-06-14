@@ -28,7 +28,7 @@ ppt <- "(PlayerPlayTime/72000)"
 sqlBroken <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM BrokenBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
 sqlBroken <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM BrokenBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
 sqlPlaced <- sprintf("SELECT Name, %s AS PPT, count(*) AS Count FROM PlacedBlocks B, ItemRegistry I WHERE B.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
-sqlCreated <- sprintf("SELECT Name, %s AS PPT, sum(Amount) AS Count FROM CreatedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name, %s ORDER BY %s", ppt, ppt, ppt)
+sqlCreated <- sprintf("SELECT Name, %s AS PPT, sum(Amount) AS Count FROM CreatedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name, %s ORDER BY COUNT", ppt, ppt, ppt)
 #sqlConsumed <- "SELECT Name, count(C.Id) AS Count FROM ConsumedItems C, ItemRegistry I WHERE C.Id = I.Id GROUP BY Name ORDER BY count(C.Id) DESC"
 # on a trop peu de données pour les objets consommés
 
@@ -151,7 +151,11 @@ ui <- fluidPage(
       ),
       checkboxInput("useGameColors",
                     label="Utiliser les couleurs du jeu pour les types d'objets/blocs",
-                    value=FALSE)
+                    value=FALSE),
+      checkboxInput("useLines",
+                    label="Graphique en lignes plutôt qu'un histogramme",
+                    value=FALSE),
+      helpText("Un graphique en ligne est moins correct d'un point de vue statistique mais permet dans certains cas de mieux comparer l'utilisation des différents types.")
     ),
     
     mainPanel(plotOutput("chart", height=600))
@@ -243,34 +247,70 @@ server <- function(input, output, session) {
     hasBlocks <- "broken" %in% input$dataChoice || "placed" %in% input$dataChoice
     hasItems <- "created" %in% input$dataChoice # || "consumed" %in% input$dataChoice
     if(hasBlocks && hasItems) {
-      title <- "Graphique chronologique de l'utilisation des blocs et objets"
+      title <- ifelse(input$useLines,
+                      "Graphique chronologique de l'utilisation des blocs et objets",
+                      "Histogramme de l'utilisation des blocs et objets")
     } else if(hasBlocks) {
-      title <- "Graphique chronologique de l'utilisation des blocs"
+      title <- ifelse(input$useLines,
+                      "Graphique chronologique de l'utilisation des blocs",
+                      "Histogramme de l'utilisatisation des blocs")
     } else if(hasItems) {
-      title <- "Graphique chronologique de l'utilisation des objets"
+      title <- ifelse(input$useLines,
+                      "Graphique chronologique de l'utilisation des objets",
+                      "Histogramme des objets créés en fonction du temps de jeu")
     } else {
       title <- "Aucune donnée"
     }
     data <- filteredData()
     
     if(input$useGameColors) {
-      coloration <- scale_color_manual(values = vColors)
+      if(input$useLines) {
+        coloration <- scale_color_manual(values = vColors)
+      } else {
+        coloration <- scale_fill_manual(values=vColors)
+      }
     } else {
-      coloration <- scale_color_discrete()
+      if(input$useLines) {
+        coloration <- scale_color_discrete()
+      } else {
+        coloration <- scale_fill_discrete()
+      }
     }
     
     # Graphique avec ggplot2
-    ggplot(data, aes(x=PPT, y=COUNT, group=NAME, color=NAME)) +
-      geom_line() +
-      geom_point() +
-      ggtitle(title) +
-      xlab("Temps de jeu du joueur sur ce serveur (heures)") +
-      ylab("Nombre d'utilisations") +
-      coloration +
-      theme(
-        text = element_text(size=18),
-        legend.key.width = unit(50, "pt")
-      ) # legend.position = "bottom"
+    if(input$useLines) {
+      ggplot(data, aes(x=PPT, y=COUNT, group=NAME, color=NAME)) +
+        geom_line() +
+        geom_point() +
+        ggtitle(title) +
+        xlab("Temps de jeu du joueur sur ce serveur (heures)") +
+        ylab("Nombre d'utilisations") +
+        coloration +
+        theme(
+          text = element_text(size=18),
+          legend.key.width = unit(50, "pt")
+        ) # legend.position = "bottom"
+    } else {
+      if(nrow(data) > 0) {
+        # Ordre des variables empilées en fonction de leur valeur au premier intervalle
+        d <- data[PPT == input$timeRange[1]]
+        d <- d[order(d$COUNT, decreasing=FALSE),]
+        order1 <- d$NAME
+        data$NAME <- factor(data$NAME, levels=order1)
+      }
+      ggplot(data, aes(x=PPT+0.5, y=COUNT, fill=NAME)) +
+        #geom_line() +
+        #geom_point() +
+        geom_histogram(stat="identity") +
+        ggtitle(title) +
+        xlab("Temps de jeu du joueur sur ce serveur (heures)") +
+        ylab("Nombre d'utilisations") +
+        coloration +
+        theme(
+          text = element_text(size=18),
+          legend.key.width = unit(50, "pt")
+        ) # legend.position = "bottom"
+    }
   })
 }
 

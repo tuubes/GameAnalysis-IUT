@@ -30,6 +30,14 @@ sqlAllMovesFreq <- "SELECT ChunkX X, ChunkY Y, ChunkZ Z, count(*) N FROM PlayerM
 dataBofas <- data.table(dbGetQuery(connBofas, sqlAllMovesFreq))
 dataJulien <- data.table(dbGetQuery(connJulien, sqlAllMovesFreq))
 
+nrow(dataBofas)
+nrow(dataJulien)
+nrow(dataBofas[N < 5])/nrow(dataBofas)
+nrow(dataJulien[N < 5])/nrow(dataJulien)
+
+nrow(dataBofas[N ==1])/nrow(dataBofas)
+nrow(dataJulien[N ==1])/nrow(dataJulien)
+
 dbDisconnect(connBofas)
 dbDisconnect(connJulien)
 
@@ -119,10 +127,10 @@ server <- function(input, output) {
         coord <- NULL
       }
       ggplot(data, aes) +
-        geom_raster() +
+        geom_tile(color="black") +
         scale_fill_gradientn(colors=c(cMin, cMid, cMax)) +
-        ggplot2::xlab("Tronçon X") +
-        ggplot2::ylab("Tronçon Z") +
+        ggplot2::xlab("Coordonnée X") +
+        ggplot2::ylab("Coordonnée Z") +
         ggtitle(title) +
         theme(
           text = element_text(size=18),

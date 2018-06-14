@@ -79,7 +79,7 @@ ui <- fluidPage(
 # -- Serveur Shiny --
 server <- function(session, input, output) {
   serverData <- reactive({
-    if(input$serverChoice == "Julien") {
+    if(input$serverChoice == "BOFAS") {
       updateSelectInput(session, "playerChoice", choices=playersBofas, selected=playersBofas[1])
       dataBofas
     } else {
