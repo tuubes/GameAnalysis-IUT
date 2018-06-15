@@ -36,17 +36,32 @@
 
 	<section class="container">
 	<h2>Démarche</h2>
-	<p>Tout d'abord, nous avons dû, avec le commenditaire, choisir les évenements les plus utiles à analyser.
-	Nous avons donc choisis d'analyser : La taille des messages, les déplacements des joueurs et des entités, les différents blocs posés et cassés, ainsi que les objets fabriqués et consommés.
-	</br> Pour se faire nous avons donc programmé des plugins afin de pouvoir les injecter dans un serveur de jeu Minecraft afin de pouvoir récolter les données et les analyser
-	</br> Au final, ça ne sera pas un, ni deux serveurs dont nous pourrons analyser les données, mais bien trois, ce qui permet d'avoir evidemment plus de données mais aussi
-	de pouvoir comparer les serveurs entre eux et voir si il existe des différences en fonction des serveurs.
-	</br>
-	</br>
-	</br>
-	Après avoir obtenu assez de données, il est temps de les analyser. Nous avons utilisé le logiciel Rstudio (logiciel de statistiques avec le langage R) pour analyser les données.
-	Les résultats de ces analyses sont présents sur l'onglet "Résultats"
+	<h3>Choix des données</h3>
+	<p>Pour commencer, nous avons choisi avec le commanditaire les évènements à analyser pour répondre au mieux à la problématique. Nous avons enregistré des informations sur :
+	<ul>
+		<li>Le nombre de caractères des messages envoyés par les joueurs</li>
+		<li>Les types des blocs posés et cassés</li>
+		<li>Les types des objets fabriqués et consommés par les joueurs</li>
+		<li>Les types d'entités qui sont apparues dans le jeu</li>
+		<li>Les déplacements des joueurs et des entités</li>
+	</ul>
+	Les types des blocs, objets et entités permettront au commanditaire de planifier son travail et de programmer les éléments les plus utilisés en premier.
+	Les déplacements et la longueur des messages permettront d'optimiser le logiciel serveur, en allouant correctement la mémoire et en calculant les parties du monde de jeu les plus fréquentées par les joueurs.
 	</p>
+	<h3>Récolte des données</h3>
+	<p>Pour récolter les données, nous avons appris à programmer en Java pour réaliser <a href="https://github.com/tuubes/GameAnalysis-IUT/tree/master/plugin">un plugin</a>,
+		 une extension du serveur de jeu, que nous avons utilisé pour enregistrer ce qu'il se passait sur les serveurs de jeu.</p>
+	<p>Le schéma ci-dessous explique l'architecture technique de notre plugin. Il se base sur le logiciel serveur Craftbukkit,
+	développé par la communauté Minecraft et fournissant une interface de programmation pour créer des plugins. Notre plugin
+	utilise des "Event Listeners" : ce sont des fonctions qui sont appellées lorsqu'un évènement survient. Lorsque <a href="https://github.com/tuubes/GameAnalysis-IUT/blob/master/plugin/src/main/java/fr/iut2/stid/gameanalysis/observation/BlockBreakListener.java">nos "listeners"</a>
+	sont appelés, ils enregistrent les informations de l'évènement dans une base de données locale.</p>
+	<p>Nous avons choisi le moteur de base de données H2. Il s'agit d'un moteur léger, écrit en Java, et pouvant
+	facilement être inclus dans un plugin comme le notre. Cela nous évite de demander aux administrateurs des
+	serveurs de mettre en place une base de données plus lourde comme MySQL.</p>
+	<img class="figure" src="img/arch_plugin.png" alt="architecture du plugin" width="80%">
+	<h3>Analyse des données</h3>
+	Une fois les données récoltées, nous avons utilisé R et les paquets ggplot2 et shiny pour analyser et représenter les données.<br>
+	Nos applications Shiny sont disponibles dans la partie <a href="résultats.html">Résultats</a>.
 	</section>
 
 	<footer>

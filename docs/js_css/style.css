@@ -73,8 +73,9 @@
 }
 
 /* Assure que les éléments soient après la navbar */
-.after-navbar {
-  padding-top: 50px;
+.container {
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 /* -- Pied de page -- */
@@ -130,6 +131,13 @@ img.round-small {
 
 img.small {
   height: 100px;
+}
+
+img.figure {
+  width: 75%;
+  text-align: center;
+  display: block;
+  margin: 20px auto;
 }
 
 .box {
